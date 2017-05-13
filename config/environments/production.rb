@@ -89,6 +89,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  raise "Please specify HOST_NAME as an environment variable" if ENV['HOST_NAME'].blank?
+  config.action_mailer.default_url_options = { host: ENV['HOST_NAME'] }
+
   raise "Please specify ALLOWED_CORS_ORIGIN as an environment variable" if ENV['ALLOWED_CORS_ORIGIN'].blank?
   config.middleware.insert_before 0, Rack::Cors do
     allow do
