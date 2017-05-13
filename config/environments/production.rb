@@ -88,4 +88,13 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  raise "Please specify ALLOWED_CORS_ORIGIN as an environment variable" if ENV['ALLOWED_CORS_ORIGIN'].blank?
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins ENV['ALLOWED_CORS_ORIGIN']
+      resource '*', :headers => :any, :expose => ['Authorization'], :methods => [:get, :post, :options]
+    end
+  end
+
 end
