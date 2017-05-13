@@ -7,6 +7,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'dotenv-rails'
+gem 'rack-cors'
 gem 'pry-rails'
 gem 'pry-nav'
 gem 'pry-rescue'
