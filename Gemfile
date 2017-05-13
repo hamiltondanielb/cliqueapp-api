@@ -14,7 +14,8 @@ gem 'devise', :git => 'https://github.com/plataformatec/devise.git'
 gem 'devise-jwt'
 gem 'minitest', "5.10.1" # unpin next time rails is updated
 gem 'rails', '~> 5.1.0'
-gem 'sqlite3'
+gem 'sqlite3', group: [:development, :test]
+gem 'pg', group: [:production]
 gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
