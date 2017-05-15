@@ -1,0 +1,11 @@
+<h1>openlesson</h1>
+
+<p class="hero flash notice"><%= flash[:notice] %></p>
+
+<p>You will now be redirected to <%= link_to 'Open Lesson', ENV['APP_URL'] %></p>
+
+<script>
+setTimeout(function(){
+  location.href = '<%= ENV['APP_URL']%>'
+}, 2000)
+</script>

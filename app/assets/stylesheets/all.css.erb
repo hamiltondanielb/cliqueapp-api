@@ -1,0 +1,65 @@
+@font-face {
+    font-family: 'Now Light';
+    src: url("<%= asset_path('Now-Light.woff') %>") format("woff"), url("<%= asset_path('Now-Light.ttf') %>") format("truetype");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,h2,h3 {
+  font-family: 'Now Light', Roboto, sans-serif;
+  font-weight:normal;
+  text-align:center;
+  margin-top:30px;
+}
+
+p {
+  line-height:1.4em;
+}
+
+body {
+  padding:10px;
+  font-family: sans-serif;
+  max-width:640px;
+  text-align:center;
+  margin:0 auto;
+}
+
+.hero {
+  border: 1px solid #eee;
+  background: #fcfcfc;
+  padding:15px 35px;
+  margin:35px 0;
+}
+
+.flash.alert {
+  font-weight:bold;
+  color: #c44;
+}
+
+body > p, body > div {
+  text-align:initial;
+}
+
+label {
+  font-weight: bold;
+}
+
+input, button {
+  width:100%;
+  padding:8px;
+  margin:2px;
+  font-size:12pt;
+  border: 1px solid #eee;
+}
+
+button, input[type="submit"] {
+  padding:10px 15px;
+  background-color: #f4f4f4;
+  padding:10px 20px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  cursor:pointer;
+  box-shadow: 0 1px 1px #888;
+}

@@ -1,0 +1,17 @@
+<h1>openlesson</h1>
+
+<div class="hero">
+  <p class="flash alert"><%= flash[:alert] %></p>
+
+  <% @user.errors.full_messages.each do |error| %>
+    <p class="error"><%= error %>.</p>
+  <% end %>
+</div>
+
+<%= form_for(@user, url: confirmation_path(:user), html: { method: :post }) do |f| %>
+  <div class="field">
+    <%= f.email_field :email, autofocus: true, value: f.object.email, placeholder: "Your email address" %>
+  </div>
+
+  <%= f.submit "Resend confirmation link" %>
+<% end %>

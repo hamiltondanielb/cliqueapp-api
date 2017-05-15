@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   devise_scope :user do
     match '/users/sign_out', via: :options, to: 'sessions#options'
   end
-  
-  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations"}
+
+  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
 end
