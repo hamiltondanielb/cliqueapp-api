@@ -5,7 +5,6 @@ class RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
 
     if resource.save
-      resource.skip_confirmation!
       sign_up(resource_name, resource)
       sign_in(resource_name, resource)
 
