@@ -91,6 +91,15 @@ Rails.application.configure do
 
   raise "Please specify HOST_NAME as an environment variable" if ENV['HOST_NAME'].blank?
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'] }
+  ActionMailer::Base.smtp_settings = {
+    :user_name => ENV['SENDGRID_USERNAME'],
+    :password => ENV['SENDGRID_PASSWORD'],
+    :domain => ENV['HOST_NAME'],
+    :address => 'smtp.sendgrid.net',
+    :port => 587,
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
 
   raise "Please specify ALLOWED_CORS_ORIGIN as an environment variable" if ENV['ALLOWED_CORS_ORIGIN'].blank?
   config.middleware.insert_before 0, Rack::Cors do
