@@ -4,10 +4,10 @@ class ConfirmationsController < Devise::ConfirmationsController
     @user = User.confirm_by_token(params[:confirmation_token])
 
     if @user.errors.empty?
-      flash.now[:notice] = "Thanks for confirming your account!"
+      flash.now[:notice] = I18n.t 'devise.confirmations.confirmed'
       render 'redirect_to_app'
     else
-      flash.now[:alert] = "We could not confirm your account."
+      flash.now[:alert] = I18n.t 'confirmations.confirmation_error'
       render 'confirmation_error'
     end
   end
@@ -16,10 +16,10 @@ class ConfirmationsController < Devise::ConfirmationsController
     self.resource = resource_class.send_confirmation_instructions(resource_params)
 
     if successfully_sent?(resource)
-      flash.now[:notice] = "Thank you. You should receive confirmation instructions by email."
+      flash.now[:notice] = I18n.t 'devise.confirmations.send_instructions'
       render 'message'
     else
-      flash.now[:alert] = "We could not send you the confirmation instructions."
+      flash.now[:alert] = I18n.t 'confirmations.sending_error'
       render 'confirmation_error'
     end
   end

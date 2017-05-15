@@ -30,4 +30,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  redirected: "You will now be redirected to %{link}"
+  test:
+    locale: Your locale is set to English
+  confirmations:
+    email_address: Your email address
+    resend: Resend confirmation link
+    confirmation_error: We could not confirm your account.
+    sending_error: We could not send you the confirmation instructions.

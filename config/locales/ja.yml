@@ -1,0 +1,29 @@
+ja:
+  test:
+    locale: 'Your locale is set to Japanese'
+
+  redirected: "You will now be redirected to %{link}"
+
+  confirmations:
+    email_address: Your email address
+    resend: Resend confirmation link
+    confirmation_error: We could not confirm your email address.
+    sending_error: We could not send confirmation instructions.
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              blank: can't be blank
+            password_confirmation:
+              confirmation: has to be the same as password
+            password:
+              blank: can't be blank
+            email:
+              blank: can't blank
+              taken: already taken
+            confirmation_token:
+              invalid: was invalid
+              blank: was blank

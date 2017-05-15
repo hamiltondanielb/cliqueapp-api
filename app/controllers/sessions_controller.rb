@@ -7,7 +7,7 @@ class SessionsController < Devise::SessionsController
       sign_in(resource_name, resource)
       render json: resource, status: 201
     else
-      render json: {errors: {password: 'Invalid password or email'}}, status: 200
+      render json: {errors: {password: I18n.t('devise.failure.invalid')}}, status: 200
     end
 
   end

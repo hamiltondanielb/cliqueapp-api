@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
+
+  get 'test_locale', to: 'application#test_locale'
 end
