@@ -105,7 +105,7 @@ Rails.application.configure do
   config.middleware.insert_before 0, Rack::Cors do
     allow do
       origins ENV['ALLOWED_CORS_ORIGIN']
-      resource '*', :headers => :any, :expose => ['Authorization'], :methods => [:get, :post, :options]
+      resource '*', :headers => :any, :expose => ['Authorization'], :methods => [:get, :post, :options, :delete]
     end
   end
 
