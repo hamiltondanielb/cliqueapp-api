@@ -5,8 +5,9 @@
 # below each fixture, per the syntax in the comments below
 #
 one: {
+  name: 'Mr Tester',
   email: 'one@example.org',
   encrypted_password: '<%= Devise::Encryptor.digest(User, '12345678') %>',
   confirmed_at: '<%= 1.day.ago %>',
-  jti: '12345678'
+  jti: '70b3f738-26dc-4d4d-a26d-530bbb393645'
 }

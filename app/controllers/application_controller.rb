@@ -1,5 +1,9 @@
 class ApplicationController < ActionController::Base
-  # protect_from_forgery with: :exception
+  include OptionsController
+
+  protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
+
   before_action :set_locale
 
   def test_locale
@@ -11,6 +15,12 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] || accept_locale(request.env) || I18n.default_locale
     I18n.locale = I18n.default_locale unless I18n.available_locales.include?(I18n.locale)
     headers['Content-Language'] = I18n.locale unless headers['Content-Language']
+  end
+
+  def authorize_user!
+    if !signed_in?
+      render json: {error: 'You need to be signed in to access this resource'}, status: 403
+    end
   end
 
   private
