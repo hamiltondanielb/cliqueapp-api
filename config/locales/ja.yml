@@ -12,6 +12,8 @@ ja:
 
   activerecord:
     errors:
+      messages:
+        record_invalid: Save did not work
       models:
         user:
           attributes:

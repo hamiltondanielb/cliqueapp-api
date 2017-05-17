@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170517133602) do
+ActiveRecord::Schema.define(version: 20170517171323) do
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -38,6 +38,11 @@ ActiveRecord::Schema.define(version: 20170517133602) do
     t.string "profile_picture_content_type"
     t.integer "profile_picture_file_size"
     t.datetime "profile_picture_updated_at"
+    t.text "bio"
+    t.string "personal_website"
+    t.string "facebook_url"
+    t.string "instagram_url"
+    t.string "twitter_url"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
