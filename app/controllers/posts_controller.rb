@@ -14,7 +14,9 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = Post.new post_params
+    attributes = post_params
+    attributes[:difficulty_level] = attributes[:difficulty_level].to_i if attributes.has_key?(:difficulty_level)
+    post = Post.new attributes
     post.user = current_user
 
     if post.save

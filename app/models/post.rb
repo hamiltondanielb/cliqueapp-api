@@ -15,11 +15,11 @@ class Post < ApplicationRecord
   validates_attachment_content_type :media, content_type: [/\Aimage\/.*\z/, /\Avideo\/.*\z/]
 
   def is_image?
-    media.content_type =~ /\Aimage/
+    !! (media.content_type =~ /\Aimage/)
   end
 
   def is_video?
-    media.content_type =~ /\Avideo/
+    !! (media.content_type =~ /\Avideo/)
   end
 
 end
