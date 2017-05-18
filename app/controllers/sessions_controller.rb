@@ -5,7 +5,7 @@ class SessionsController < Devise::SessionsController
   def create
     resource = User.find_by email: params[:user].try(:[], :email)
 
-    if resource.valid_password? params[:user][:password]
+    if resource && resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
       render json: resource, status: 201
     else
