@@ -4,6 +4,7 @@ Devise.setup do |config|
   raise "Please specify a DEVISE_JWT_SECRET_KEY in the environment" if ENV['DEVISE_JWT_SECRET_KEY'].blank?
   config.jwt do |jwt|
     jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
+    jwt.expiration_time = 100.years
   end
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -126,7 +127,7 @@ Devise.setup do |config|
   # able to access the website for two days without confirming their account,
   # access will be blocked just in the third day. Default is 0.days, meaning
   # the user cannot access the website without confirming their account.
-  config.allow_unconfirmed_access_for = 36500.days
+  config.allow_unconfirmed_access_for = 100.years
 
   # A period that the user is allowed to confirm their account before their
   # token becomes invalid. For example, if set to 3.days, the user can confirm
