@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   match '*path', via: :options, to: 'application#options'
 
   resources :users, only: [:update]
+  resources :posts, only: [:create, :show, :index]
 
   get 'test_locale', to: 'application#test_locale'
 

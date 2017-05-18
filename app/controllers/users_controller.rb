@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     if current_user.update user_params
       render json: current_user
     else
-      render json: { errors: resource.errors.map {|k,v| [k, v]}.to_h }
+      render json: errors_hash_for(current_user)
     end
   end
 

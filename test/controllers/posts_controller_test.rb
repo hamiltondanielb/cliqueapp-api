@@ -1,0 +1,27 @@
+require 'test_helper'
+
+class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "creates a post" do
+    params = posts(:one).attributes
+    params[:id] = nil
+    params[:title] = "test post"
+
+    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+
+    assert_equal 201, response.status, "body was #{response.body}"
+    assert_equal Post.last.title, "test post"
+  end
+
+  test "shows a post" do
+    get post_path(posts(:one))
+
+    assert response.successful?
+  end
+
+  test "shows a user's feed" do
+    get posts_path(user_id: users(:one))
+
+    assert response.successful?
+    assert response.body.include?(posts(:one).title)
+  end
+end

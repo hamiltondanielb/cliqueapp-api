@@ -12,7 +12,7 @@ class RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       set_minimum_password_length
-      render json: { errors: resource.errors.map {|k,v| [k, v]}.to_h }
+      render json: errors_hash_for(resource)
     end
 
   end

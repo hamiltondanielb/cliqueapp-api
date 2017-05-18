@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def errors_hash_for model
+    { errors: model.errors.map {|k,v| [k, v]}.to_h }
+  end
+
   private
 
   def accept_locale(env)

@@ -11,8 +11,4 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     refute users(:one).reload.profile_picture.blank?
   end
 
-  def authorization_header_for user
-    payload = Warden::JWTAuth::PayloadUserHelper.payload_for_user(user, :user)
-    {'Authorization' => "Bearer #{JWT.encode payload, ENV['DEVISE_JWT_SECRET_KEY'], 'HS256'}"}
-  end
 end
