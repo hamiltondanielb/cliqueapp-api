@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   belongs_to :user
+  acts_as_ordered_taggable
 
   validates :title, :user, presence:true
 

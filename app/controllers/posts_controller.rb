@@ -25,6 +25,6 @@ class PostsController < ApplicationController
 
   protected
   def post_params
-    params.require(:post).permit(:title, :description, :difficulty_level, :women_only)
+    params.require(:post).permit(:title, :description, :difficulty_level, :women_only, :tag_list)
   end
 end
