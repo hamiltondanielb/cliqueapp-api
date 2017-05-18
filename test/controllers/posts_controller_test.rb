@@ -14,6 +14,30 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal Post.last.tags.map(&:name), ["cats", "animals"]
   end
 
+  test "creates a post with an image" do
+    params = posts(:one).attributes
+    params[:id] = nil
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/abstract-user.png"), "image/png")
+    params[:media] = file
+
+    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+
+    assert_equal 201, response.status, "body was #{response.body}"
+    refute Post.last.media.blank?
+  end
+
+  test "creates a post with a video" do
+    params = posts(:one).attributes
+    params[:id] = nil
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/what-yoga-is-about.mkv"), "video/x-matroska")
+    params[:media] = file
+
+    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+
+    assert_equal 201, response.status, "body was #{response.body}"
+    refute Post.last.media.blank?
+  end
+
   test "shows a post" do
     get post_path(posts(:one))
 

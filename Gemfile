@@ -8,6 +8,7 @@ end
 
 gem 'acts-as-taggable-on', '~> 4.0'
 gem "paperclip", "~> 5.0.0"
+gem 'paperclip-av-transcoder'
 gem 'dotenv-rails'
 gem 'rack-cors'
 gem 'pry-rails'
