@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   belongs_to :user
+  include S3Credentials
   acts_as_ordered_taggable
 
   validates :user, :media, presence:true
