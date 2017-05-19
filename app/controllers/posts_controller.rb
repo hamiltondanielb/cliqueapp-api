@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   def index
     if params.include? :user_id
-      render json: User.find(params[:user_id]).posts
+      render json: User.find(params[:user_id]).posts.order('created_at DESC')
     else
       render json: {}
     end
