@@ -2,9 +2,7 @@ class Post < ApplicationRecord
   belongs_to :user
   acts_as_ordered_taggable
 
-  validates :title, :user, :media, presence:true
-
-  enum difficulty_level: [:beginner, :intermediate, :expert]
+  validates :user, :media, presence:true
 
   has_attached_file :media,
     styles: lambda { |a| a.instance.is_image? ?

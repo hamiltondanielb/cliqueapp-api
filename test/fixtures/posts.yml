@@ -2,14 +2,8 @@
 
 one:
   user: one
-  title: The Post
   description: Here is a test description
-  difficulty_level: 1
-  women_only: false
 
 two:
   user: two
-  title: MyString
   description: MyText
-  difficulty_level: 1
-  women_only: false

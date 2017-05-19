@@ -1,5 +1,5 @@
 class PostSerializer < ActiveModel::Serializer
-  attributes :id, :title, :created_at, :description, :media_url, :is_image, :is_video, :user_avatar_url, :user_name, :women_only, :difficulty_level, :content_type
+  attributes :id, :created_at, :description, :media_url, :is_image, :is_video, :user_avatar_url, :user_name, :content_type
 
   def media_url
     object.media.url(:original)

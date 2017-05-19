@@ -5,7 +5,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "creates a post with an image" do
     params = posts(:one).attributes
     params[:id] = nil
-    params[:title] = "test post"
+    params[:description] = "test post"
     params[:tag_list] = "cats, animals"
     file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/abstract-user.png"), "image/png")
     params[:media] = file
@@ -13,7 +13,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
 
     assert_equal 201, response.status, "body was #{response.body}"
-    assert_equal Post.last.title, "test post"
+    assert_equal Post.last.description, "test post"
     assert_equal Post.last.tags.map(&:name), ["cats", "animals"]
     refute Post.last.media.blank?
   end
@@ -40,6 +40,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get posts_path(user_id: users(:one))
 
     assert response.successful?
-    assert response.body.include?(posts(:one).title)
+    assert response.body.include?(posts(:one).description)
   end
 end

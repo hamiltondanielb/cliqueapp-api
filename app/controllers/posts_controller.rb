@@ -14,9 +14,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    attributes = post_params
-    attributes[:difficulty_level] = attributes[:difficulty_level].to_i if attributes.has_key?(:difficulty_level)
-    post = Post.new attributes
+    post = Post.new post_params
     post.user = current_user
 
     if post.save
@@ -28,6 +26,6 @@ class PostsController < ApplicationController
 
   protected
   def post_params
-    params.require(:post).permit(:title, :description, :difficulty_level, :women_only, :tag_list, :media)
+    params.require(:post).permit(:description, :tag_list, :media)
   end
 end

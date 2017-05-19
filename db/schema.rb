@@ -10,14 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518112739) do
+ActiveRecord::Schema.define(version: 20170519140705) do
 
   create_table "posts", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.string "title", null: false
     t.text "description"
-    t.integer "difficulty_level"
-    t.boolean "women_only", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "media_file_name"
@@ -80,9 +77,6 @@ ActiveRecord::Schema.define(version: 20170518112739) do
     t.datetime "profile_picture_updated_at"
     t.text "bio"
     t.string "personal_website"
-    t.string "facebook_url"
-    t.string "instagram_url"
-    t.string "twitter_url"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
