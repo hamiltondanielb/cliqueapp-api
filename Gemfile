@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'aws-sdk', group: :production
 gem 'acts-as-taggable-on', '~> 4.0'
 gem "paperclip", "~> 5.0.0"
 gem 'paperclip-av-transcoder'
