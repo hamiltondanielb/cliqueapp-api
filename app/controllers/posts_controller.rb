@@ -24,7 +24,27 @@ class PostsController < ApplicationController
     end
   end
 
+  def update
+    post = current_user.posts.find params[:id]
+
+    if post.update update_post_params
+      render json: post
+    else
+      render json: errors_hash_for(post)
+    end
+  end
+
+  def destroy
+    post = current_user.posts.find params[:id]
+    post.destroy!
+    head :no_content
+  end
+
   protected
+  def update_post_params
+    params.require(:post).permit(:description, :tag_list)
+  end
+
   def post_params
     params.require(:post).permit(:description, :tag_list, :media)
   end

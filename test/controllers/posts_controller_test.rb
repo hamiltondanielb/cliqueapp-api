@@ -1,6 +1,19 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "deletes a post" do
+    delete post_path(posts(:one)), headers: authorization_header_for(posts(:one).user)
+
+    assert_equal 204, response.status
+    refute Post.find_by(id: posts(:one).id), "post should have been deleted"
+  end
+
+  test "updates a post" do
+    patch post_path(posts(:one)), params: {post: {description: "new description"}}, headers: authorization_header_for(posts(:one).user)
+
+    assert response.successful?, response.body
+    assert_equal "new description", posts(:one).reload.description, "body was #{response.body}"
+  end
 
   test "creates a post with an image" do
     params = posts(:one).attributes
