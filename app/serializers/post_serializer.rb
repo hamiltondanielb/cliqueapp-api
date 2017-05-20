@@ -1,5 +1,5 @@
 class PostSerializer < ActiveModel::Serializer
-  attributes :id, :created_at, :description, :media_url, :is_image, :is_video, :user_avatar_url, :user_name, :content_type
+  attributes :id, :created_at, :description, :media_url, :is_image, :is_video, :user_avatar_url, :user_name, :content_type, :tag_list
 
   def media_url
     object.media.url(:original)
@@ -23,5 +23,9 @@ class PostSerializer < ActiveModel::Serializer
 
   def content_type
     object.media.content_type
+  end
+
+  def tag_list
+    object.tags.map(&:name)
   end
 end

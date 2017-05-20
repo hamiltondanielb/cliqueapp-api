@@ -24,4 +24,8 @@ class Post < ApplicationRecord
     !! (media.content_type =~ /\Avideo/)
   end
 
+  def prepare_tag_list
+    return if tag_list.blank?
+    self.tag_list = tag_list.map{|tag| tag.split(/[ ,#]/)}.flatten.select {|t| t.present?}
+  end
 end

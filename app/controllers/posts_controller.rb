@@ -16,6 +16,7 @@ class PostsController < ApplicationController
   def create
     post = Post.new post_params
     post.user = current_user
+    post.prepare_tag_list
 
     if post.save
       render json: post, status: 201
@@ -27,7 +28,10 @@ class PostsController < ApplicationController
   def update
     post = current_user.posts.find params[:id]
 
-    if post.update update_post_params
+    post.assign_attributes update_post_params
+    post.prepare_tag_list
+
+    if post.save
       render json: post
     else
       render json: errors_hash_for(post)
