@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
-  before_action :authorize_user!
+  before_action :authorize_user!, except: [:show]
+
+  def show
+    render json: User.find(params[:id])
+  end
 
   def update
     if current_user.update user_params

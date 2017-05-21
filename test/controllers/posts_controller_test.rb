@@ -1,6 +1,20 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "serves feed from follows" do
+    get posts_path, headers: authorization_header_for(users(:one))
+
+    assert_equal users(:one).home_feed.map{|h|h["id"]}, JSON.parse(response.body).map{|h|h["id"]}
+  end
+
+  test "serves user feed" do
+    get posts_path, params: {user_id: users(:one).id}
+
+    assert response.successful?, response.status
+    assert users(:one).posts.any?
+    assert_equal users(:one).posts.map{|h|h["id"]}, JSON.parse(response.body).map{|h|h["id"]}
+  end
+
   test "deletes a post" do
     delete post_path(posts(:one)), headers: authorization_header_for(posts(:one).user)
 

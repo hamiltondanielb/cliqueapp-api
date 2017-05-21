@@ -4,8 +4,10 @@ class PostsController < ApplicationController
   def index
     if params.include? :user_id
       render json: User.find(params[:user_id]).posts.order('created_at DESC')
+    elsif current_user && current_user.follows.any?
+      render json: current_user.home_feed
     else
-      render json: {}
+      render json: Post.order('created_at DESC').limit(20)
     end
   end
 

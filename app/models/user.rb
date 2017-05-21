@@ -28,4 +28,8 @@ class User < ApplicationRecord
   def follower_count
     followers.count
   end
+
+  def home_feed
+    Post.order('created_at DESC').where('user_id in (?)', follows.map(&:followed_id)).limit(20)
+  end
 end
