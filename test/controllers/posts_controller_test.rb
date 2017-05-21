@@ -2,6 +2,8 @@ require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
   test "serves feed from follows" do
+    users(:one).follows.create! followed_id: users(:two).id
+
     get posts_path, headers: authorization_header_for(users(:one))
 
     assert_equal users(:one).home_feed.map{|h|h["id"]}, JSON.parse(response.body).map{|h|h["id"]}

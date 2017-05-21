@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
 
   match '*path', via: :options, to: 'application#options'
 
@@ -6,10 +7,9 @@ Rails.application.routes.draw do
   delete '/follows/:followed_id', to: 'follows#destroy', as: 'destroy_follow'
   resources :likes, only: [:create]
   delete '/likes/:post_id', to: 'likes#destroy', as: 'destroy_like'
-  resources :users, only: [:update, :show]
   resources :posts
 
   get 'test_locale', to: 'application#test_locale'
 
-  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
+  resources :users, only: [:update, :show]
 end
