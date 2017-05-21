@@ -1,11 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  #
-  # devise_scope :user do
-  #   match '/users/sign_out', via: :options, to: 'sessions#options'
-  # end
+
   match '*path', via: :options, to: 'application#options'
 
+  resources :follows, only: [:create]
+  delete '/follows/:followed_id', to: 'follows#destroy', as: 'destroy_follow'
   resources :users, only: [:update]
   resources :posts
 
