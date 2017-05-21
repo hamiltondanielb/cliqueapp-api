@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   resources :follows, only: [:create]
   delete '/follows/:followed_id', to: 'follows#destroy', as: 'destroy_follow'
+  resources :likes, only: [:create]
+  delete '/likes/:post_id', to: 'likes#destroy', as: 'destroy_like'
   resources :users, only: [:update]
   resources :posts
 

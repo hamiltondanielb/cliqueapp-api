@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   acts_as_ordered_taggable
 
   validates :user, :media, presence:true
+  has_many :likes, dependent: :destroy
 
   has_attached_file :media,
     styles: lambda { |a| a.instance.is_image? ?
@@ -27,5 +28,9 @@ class Post < ApplicationRecord
   def prepare_tag_list
     return if tag_list.blank?
     self.tag_list = tag_list.map{|tag| tag.split(/[ ,#]/)}.flatten.select {|t| t.present?}
+  end
+
+  def like_count
+    likes.count
   end
 end
