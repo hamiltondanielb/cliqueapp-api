@@ -1,8 +1,6 @@
 deployment:
   staging:
     branch: master
-    heroku:
-      appname: open-lesson-api-staging
     commands: # https://circleci.com/docs/1.0/continuous-deployment-with-heroku/
       - |
         cat >~/.netrc <<EOF
