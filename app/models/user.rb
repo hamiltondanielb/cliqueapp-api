@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :followers, dependent: :destroy, class_name: Follow, foreign_key: :followed_id
   has_many :likes
 
-  def follow_count
+  def following_count
     follows.count
   end
 

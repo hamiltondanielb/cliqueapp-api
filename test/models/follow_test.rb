@@ -9,12 +9,12 @@ class FollowTest < ActiveSupport::TestCase
   end
 
   test "counts follows and followers" do
-    assert_equal 0, users(:one).follow_count
+    assert_equal 0, users(:one).following_count
     assert_equal 0, users(:two).follower_count
 
     users(:one).follows.create! followed:users(:two)
 
-    assert_equal 1, users(:one).reload.follow_count
+    assert_equal 1, users(:one).reload.following_count
     assert_equal 1, users(:two).reload.follower_count
   end
 

@@ -5,7 +5,7 @@ class FollowsControllerTest < ActionDispatch::IntegrationTest
     post follows_path, params: {follow: {followed_id:users(:two).id}}, headers: authorization_header_for(users(:one))
 
     assert_equal 204, response.status
-    assert_equal 1, users(:one).reload.follow_count
+    assert_equal 1, users(:one).reload.following_count
   end
 
   test "destroys a follow" do
@@ -13,6 +13,6 @@ class FollowsControllerTest < ActionDispatch::IntegrationTest
 
     delete destroy_follow_path(follow.followed_id), headers: authorization_header_for(users(:one))
 
-    assert_equal 0, users(:one).reload.follow_count
+    assert_equal 0, users(:one).reload.following_count
   end
 end
