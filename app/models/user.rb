@@ -17,8 +17,10 @@ class User < ApplicationRecord
   validates_attachment_content_type :profile_picture, content_type: /\Aimage\/.*\z/
 
   has_many :posts, dependent: :destroy
-  has_many :follows, dependent: :destroy, class_name: Follow, foreign_key: :follower_id
-  has_many :followers, dependent: :destroy, class_name: Follow, foreign_key: :followed_id
+  has_many :follows, dependent: :destroy, class_name: 'Follow', foreign_key: :follower_id
+  has_many :followers, dependent: :destroy, class_name: 'Follow', foreign_key: :followed_id
+  has_many :following_users, through: :follows, source: :followed
+  has_many :follower_users, through: :followers, source: :follower
   has_many :likes
 
   def following_count

@@ -12,4 +12,7 @@ Rails.application.routes.draw do
   get 'test_locale', to: 'application#test_locale'
 
   resources :users, only: [:update, :show]
+
+  get '/users/:user_id/followers', to: 'follows#followers', as: 'followers'
+  get '/users/:user_id/following', to: 'follows#following', as: 'following'
 end
