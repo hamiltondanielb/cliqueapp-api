@@ -2,13 +2,14 @@ class LikesController < ApplicationController
   before_action :authorize_user!
 
   def create
-    current_user.likes.create! like_params
+    current_user.likes.find_or_create_by! like_params
 
     head :no_content
   end
 
   def destroy
-    current_user.likes.find_by(post_id: params[:post_id]).destroy!
+    like = current_user.likes.find_by(post_id: params[:post_id])
+    like.destroy! if like.present?
 
     head :no_content
   end
