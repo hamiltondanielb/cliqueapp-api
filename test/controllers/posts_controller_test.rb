@@ -50,7 +50,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "creates a post with a video" do
     params = posts(:one).attributes
     params[:id] = nil
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/what-yoga-is-about.mkv"), "video/x-matroska")
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
     params[:media] = file
 
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
