@@ -1,5 +1,5 @@
 class PostSerializer < ActiveModel::Serializer
-  attributes :id, :created_at, :description, :is_image, :is_video, :user_avatar_url, :user_name, :tag_list, :like_count, :user_id, :media_list
+  attributes :id, :created_at, :description, :is_image, :is_video, :user_avatar_url, :user_name, :tag_list, :like_count, :user_id, :media_list, :event
 
   def media_list
     [{
@@ -32,5 +32,9 @@ class PostSerializer < ActiveModel::Serializer
 
   def tag_list
     object.tags.map(&:name)
+  end
+
+  def event
+    ActiveModelSerializers::SerializableResource.new object.event
   end
 end
