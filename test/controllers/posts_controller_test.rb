@@ -5,14 +5,16 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     params = posts(:one).attributes
     params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
     params[:event] = {
-      date: Date.new,
-      time: Time.now
+      start_time: "2017-05-25T16:43:50.206Z",
+      end_time: "2017-05-25T17:53:50.206Z"
     }
 
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
 
     assert_equal 201, response.status, response.status
     assert Post.last.event.present?
+    assert_equal 25, Post.last.event.start_time.day
+    assert_equal 17, Post.last.event.end_time.hour
   end
 
   test "serves feed from follows" do

@@ -61,6 +61,6 @@ class PostsController < ApplicationController
   end
 
   def event_params
-    params.require(:post).require(:event).permit(:date, :time)
+    params.require(:post).require(:event).permit(:start_time, :end_time)
   end
 end
