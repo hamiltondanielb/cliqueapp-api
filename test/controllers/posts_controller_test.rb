@@ -1,6 +1,20 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "creates a post attached to an event" do
+    params = posts(:one).attributes
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    params[:event] = {
+      date: Date.new,
+      time: Time.now
+    }
+
+    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+
+    assert_equal 201, response.status, response.status
+    assert Post.last.event.present?
+  end
+
   test "serves feed from follows" do
     users(:one).follows.create! followed_id: users(:two).id
 
@@ -20,7 +34,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "deletes a post" do
     delete post_path(posts(:one)), headers: authorization_header_for(posts(:one).user)
 
-    assert_equal 204, response.status
+    assert_equal 204, response.status, response.status
     refute Post.find_by(id: posts(:one).id), "post should have been deleted"
   end
 
@@ -41,7 +55,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
 
-    assert_equal 201, response.status, "body was #{response.body}"
+    assert_equal 201, response.status, "status was #{response.status}"
     assert_equal Post.last.description, "test post"
     assert_equal Post.last.tags.map(&:name), ["cats", "animals"]
     refute Post.last.media.blank?
@@ -55,7 +69,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
 
-    assert_equal 201, response.status, "body was #{response.body}"
+    assert_equal 201, response.status, "status was #{response.status}"
     refute Post.last.media.blank?
   end
 

@@ -6,6 +6,7 @@ class Post < ApplicationRecord
 
   validates :user, :media, presence:true
   has_many :likes, dependent: :destroy
+  has_one :event, dependent: :destroy
 
   has_attached_file :media,
     styles: lambda { |a| a.instance.is_image? ?

@@ -1,3 +1,4 @@
+
 class PostsController < ApplicationController
   before_action :authorize_user!, except: [:index, :show]
 
@@ -19,6 +20,10 @@ class PostsController < ApplicationController
     post = Post.new post_params
     post.user = current_user
     post.prepare_tag_list
+
+    if params[:post][:event].present?
+      post.event = Event.new(event_params)
+    end
 
     if post.save
       render json: post, status: 201
@@ -53,5 +58,9 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:description, :tag_list, :media)
+  end
+
+  def event_params
+    params.require(:post).require(:event).permit(:date, :time)
   end
 end
