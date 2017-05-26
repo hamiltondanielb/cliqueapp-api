@@ -1,6 +1,20 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "updates an event attached to a post" do
+    event = events(:one)
+
+    patch post_path(event.post), params: {post: {event: {
+      start_time: "2017-05-25T16:43:50.206Z",
+      end_time: "2017-05-25T17:53:50.206Z"
+    }}}, headers: authorization_header_for(event.post.user)
+
+    assert_equal 200, response.status
+    assert_equal 25, event.reload.start_time.day
+    assert_equal 17, event.reload.end_time.hour
+    assert_equal 53, event.reload.end_time.min
+  end
+
   test "creates a post attached to an event" do
     params = posts(:one).attributes
     params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")

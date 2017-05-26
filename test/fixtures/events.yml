@@ -1,1 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  post: one
+  start_time: <%= 24.hours.from_now %>
+  end_time: <%= 25.hours.from_now %>

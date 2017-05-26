@@ -38,6 +38,10 @@ class PostsController < ApplicationController
     post.assign_attributes update_post_params
     post.prepare_tag_list
 
+    if post.event.present? && params[:post][:event].present?
+      post.event.assign_attributes event_params
+    end
+
     if post.save
       render json: post
     else
