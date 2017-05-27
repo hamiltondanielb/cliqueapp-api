@@ -11,4 +11,17 @@ class EventsController < ApplicationController
 
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
+
+  def days_with_activity
+    return render(json: {errors: 'Please specify a start date'}, status:400) if params[:seven_weeks_from].blank?
+    user = params[:user_id].present?? User.find(params[:user_id]) : current_user
+    return render(json: {errors: 'Please specify a user'}, status:400) if user.blank?
+
+    days = Event.joins(:post).where('posts.user_id' => user.id).
+      where('start_time >= ?', params[:seven_weeks_from]).
+      where('start_time <= ?', Time.parse(params[:seven_weeks_from]) + 7.weeks).
+      pluck(:start_time)
+
+    render json: {days: days}
+  end
 end
