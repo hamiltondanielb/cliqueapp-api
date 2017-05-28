@@ -23,6 +23,10 @@ class PostsController < ApplicationController
 
     if params[:post][:event].present?
       post.event = Event.new(event_params)
+
+      if params[:post][:event][:location].present?
+        post.event.location = Location.new(location_params)
+      end
     end
 
     if post.save
@@ -40,6 +44,11 @@ class PostsController < ApplicationController
 
     if post.event.present? && params[:post][:event].present?
       post.event.assign_attributes event_params
+
+      if params[:post][:event][:location].present?
+        post.event.build_location if post.event.location.blank?
+        post.event.location.assign_attributes location_params
+      end
     end
 
     if post.save
@@ -66,5 +75,9 @@ class PostsController < ApplicationController
 
   def event_params
     params.require(:post).require(:event).permit(:start_time, :end_time, :women_only, :difficulty_level, :price)
+  end
+
+  def location_params
+    params.require(:post).require(:event).require(:location).permit(:label, :address, :lat, :lng)
   end
 end

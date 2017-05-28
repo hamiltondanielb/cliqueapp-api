@@ -6,13 +6,24 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     patch post_path(event.post), params: {post: {event: {
       start_time: "2017-05-25T16:43:50.206Z",
-      end_time: "2017-05-25T17:53:50.206Z"
+      end_time: "2017-05-25T17:53:50.206Z",
+      location: {
+        label: 'Studio',
+        address: '1 Shibuya',
+        lat: 33.1,
+        lng: 123.1
+      }
     }}}, headers: authorization_header_for(event.post.user)
 
     assert_equal 200, response.status
-    assert_equal 25, event.reload.start_time.day
-    assert_equal 17, event.reload.end_time.hour
-    assert_equal 53, event.reload.end_time.min
+    event.reload
+    assert_equal 25, event.start_time.day
+    assert_equal 17, event.end_time.hour
+    assert_equal 53, event.end_time.min
+    assert_equal 'Studio', event.location.label
+    assert_equal '1 Shibuya', event.location.address
+    assert_equal 33.1, event.location.lat
+    assert_equal 123.1, event.location.lng
   end
 
   test "creates a post attached to an event" do
@@ -22,13 +33,24 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z"
     }
+    params[:event][:location] = {
+      label: 'Studio',
+      address: '1 Shibuya',
+      lat: 33.1,
+      lng: 123.1
+    }
 
     post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
 
-    assert_equal 201, response.status, response.status
+    assert_equal 201, response.status, "#{response.status}: #{response.body[0,120]}"
     assert Post.last.event.present?
+    assert Post.last.event.location.present?
     assert_equal 25, Post.last.event.start_time.day
     assert_equal 17, Post.last.event.end_time.hour
+    assert_equal 'Studio', Post.last.event.location.label
+    assert_equal '1 Shibuya', Post.last.event.location.address
+    assert_equal 33.1, Post.last.event.location.lat
+    assert_equal 123.1, Post.last.event.location.lng
   end
 
   test "serves feed from follows" do
