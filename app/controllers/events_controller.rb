@@ -17,7 +17,7 @@ class EventsController < ApplicationController
     user = params[:user_id].present?? User.find(params[:user_id]) : current_user
     return render(json: {errors: 'Please specify a user'}, status:400) if user.blank?
 
-    days = Event.joins(:post).where('posts.user_id' => user.id).
+    days = user.organized_events.
       where('start_time >= ?', params[:seven_weeks_from]).
       where('start_time <= ?', Time.parse(params[:seven_weeks_from]) + 7.weeks).
       pluck(:start_time)

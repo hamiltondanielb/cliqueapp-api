@@ -33,6 +33,14 @@ class User < ApplicationRecord
     followers.count
   end
 
+  def event_count
+    organized_events.count
+  end
+
+  def organized_events
+    Event.joins(:post).where('posts.user_id' => id)
+  end
+
   def home_feed
     Post.order('created_at DESC').where('user_id in (?)', follows.map(&:followed_id)).limit(20)
   end

@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
 
-  attributes :id, :email, :created_at, :name, :profile_picture_url, :personal_website, :bio, :following_count, :follower_count, :follows, :likes, :post_count
+  attributes :id, :email, :created_at, :name, :profile_picture_url, :personal_website, :bio, :following_count, :follower_count, :follows, :likes, :post_count, :event_count
 
   def profile_picture_url
     object.profile_picture.url(:medium)
