@@ -6,6 +6,18 @@ class EventRegistrationsController < ApplicationController
   end
 
   def create
+    event = Event.find params[:event_id]
+
+    if !event.free?
+      begin
+        processor = PaymentProcessor.new
+        current_user.update! stripe_customer_id: processor.create_customer(params[:stripe_info][:email], params[:stripe_info][:id]).id
+        processor.charge event.price.to_i, current_user.stripe_customer_id, "acct_1APr3BLdGggRtZJo"
+      rescue Exception => e
+        return render json: {errors: {global: "We could not process the payment: #{e}"}}
+      end
+    end
+
     current_user.event_registrations.create! event_id: params[:event_id]
 
     head :no_content

@@ -9,4 +9,8 @@ class Event < ApplicationRecord
   def guest_count
     event_registrations.count
   end
+
+  def free?
+    !(price > 0)
+  end
 end

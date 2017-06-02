@@ -2,15 +2,24 @@ class PaymentProcessor
   raise "Please specify the STRIPE_KEY as an environment variable" unless ENV['STRIPE_KEY']
   Stripe.api_key = ENV['STRIPE_KEY']
 
-  def charge amount, tokenized_card, account_id
+  def create_customer email, token
+    begin
+      Stripe::Customer.create(email: email, source: token)
+    rescue Exception => e
+      logger.warn("There was a problem creating a Stripe customer: #{e.message}")
+      raise e
+    end
+  end
+
+  def charge amount, customer_id, destination_id
     begin
       Stripe::Charge.create({
         :amount => amount,
         :currency => "JPY",
-        :source => tokenized_card,
+        :customer => customer_id,
         :destination => {
           :amount => amount,
-          :account => account_id,
+          :account => destination_id,
         }
       })
     rescue Stripe::CardError => e

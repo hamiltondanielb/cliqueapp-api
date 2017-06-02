@@ -6,7 +6,17 @@ one:
   media_file_name: 'test.png'
   media_content_type: 'image/png'
   media_file_size: 1024
-  
+
 two:
   user: two
-  description: MyText
+  description: test post
+  media_file_name: 'test.png'
+  media_content_type: 'image/png'
+  media_file_size: 1024
+
+three:
+  user: three
+  description: test post with event
+  media_file_name: 'test.png'
+  media_content_type: 'image/png'
+  media_file_size: 1024

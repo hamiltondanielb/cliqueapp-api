@@ -19,3 +19,11 @@ two: {
   confirmed_at: '<%= 1.day.ago %>',
   jti: '10b3f738-16dc-4e4d-a26d-530bbb393649'
 }
+
+three: {
+  name: 'Mark',
+  email: 'mark@example.org',
+  encrypted_password: '<%= Devise::Encryptor.digest(User, '12345678') %>',
+  confirmed_at: '<%= 1.day.ago %>',
+  jti: '10b3f738-16dc-4e4d-a26d-530bbb343672'
+}
