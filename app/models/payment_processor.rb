@@ -27,4 +27,9 @@ class PaymentProcessor
       raise e
     end
   end
+
+  def get_account_id authorization_code
+    response = Stripe::OAuth.token code:authorization_code, grant_type:'authorization_code'
+    response["stripe_user_id"]
+  end
 end

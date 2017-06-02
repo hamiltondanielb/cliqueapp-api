@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'test_locale', to: 'application#test_locale'
 
   resources :users, only: [:update, :show]
+  post '/users/connect_stripe', to: 'users#connect_stripe', as: 'connect_stripe'
   get '/events/days_with_activity', to: 'events#days_with_activity', as: 'days_with_activity'
   resources :events, only: [:index] do
     resources :event_registrations, only: [:create]

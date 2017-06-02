@@ -16,4 +16,11 @@ class PaymentProcessorTest < ActiveSupport::TestCase
 
     assert processor.charge 1000, "cus_AlqetMhwaNl8lg", "acct_1APr3BLdGggRtZJo"
   end
+
+  test "it retrieves account id" do
+    mock_stripe_oauth_token
+
+    processor = PaymentProcessor.new
+    assert processor.get_account_id("code")
+  end
 end

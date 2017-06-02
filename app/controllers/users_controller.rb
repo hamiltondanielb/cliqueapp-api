@@ -13,6 +13,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def connect_stripe
+     authorization_code = params[:user][:authorization_code]
+
+     begin
+       current_user.update! stripe_account_id: PaymentProcessor.new.get_account_id(authorization_code)
+     rescue Exception => e
+       return render json: {errors: {"global": e.message}}
+     end
+
+     head :no_content
+  end
+
   private
 
   def user_params

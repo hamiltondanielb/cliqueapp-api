@@ -11,4 +11,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     refute users(:one).reload.profile_picture.blank?
   end
 
+  test "it connects a user with their stripe account" do
+    mock_stripe_oauth_token
+
+    assert users(:one).stripe_account_id.blank?
+
+    post connect_stripe_path, params: {user: {authorization_code: "code"}}, headers: authorization_header_for(users(:one))
+
+    assert_equal 204, response.status, response.status
+    assert users(:one).reload.stripe_account_id.present?
+  end
+
 end

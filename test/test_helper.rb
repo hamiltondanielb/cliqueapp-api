@@ -10,4 +10,8 @@ class ActiveSupport::TestCase
     payload = Warden::JWTAuth::PayloadUserHelper.payload_for_user(user, :user)
     {'Authorization' => "Bearer #{JWT.encode payload, ENV['DEVISE_JWT_SECRET_KEY'], 'HS256'}"}
   end
+
+  def mock_stripe_oauth_token
+    require_relative 'mock_stripe_oauth_token'
+  end
 end
