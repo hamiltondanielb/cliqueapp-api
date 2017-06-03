@@ -9,7 +9,8 @@ one: {
   email: 'one@example.org',
   encrypted_password: '<%= Devise::Encryptor.digest(User, '12345678') %>',
   confirmed_at: '<%= 1.day.ago %>',
-  jti: '70b3f738-26dc-4d4d-a26d-530bbb393645'
+  jti: '70b3f738-26dc-4d4d-a26d-530bbb393645',
+  instructor_terms_accepted: true
 }
 
 two: {

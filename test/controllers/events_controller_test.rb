@@ -2,7 +2,6 @@ require 'test_helper'
 
 class EventsControllerTest < ActionDispatch::IntegrationTest
   test "lists days with activity for seven weeks from date" do
-
     create_event(users(:one), 15.weeks.ago)
     create_event(users(:one), 14.weeks.ago)
     create_event(users(:one), 13.weeks.ago)

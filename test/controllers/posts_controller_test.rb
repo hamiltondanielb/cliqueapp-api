@@ -1,6 +1,22 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "it doesn't allow users who have not accepted the instructor terms to create a paid event" do
+    params = posts(:one).attributes
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    params[:event] = {
+      start_time: "2017-05-25T16:43:50.206Z",
+      end_time: "2017-05-25T17:53:50.206Z",
+      price: 100
+    }
+
+    post posts_path, params: {post: params}, headers: authorization_header_for(users(:two))
+
+    assert_equal 200, response.status, "#{response.status}: #{response.body[0,120]}"
+    assert JSON.parse(response.body).include?('errors')
+    assert response.body.include?('become an instructor before charging')
+  end
+
   test "updates an event attached to a post" do
     event = events(:one)
 

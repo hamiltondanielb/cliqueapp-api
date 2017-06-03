@@ -1,5 +1,5 @@
 class PostSerializer < ActiveModel::Serializer
-  attributes :id, :created_at, :description, :is_image, :is_video, :user_avatar_url, :user_name, :tag_list, :like_count, :user_id, :media_list, :event
+  attributes :id, :created_at, :description, :is_image, :is_video, :user_avatar_url, :tag_list, :like_count, :user_id, :media_list, :event, :user
 
   def media_list
     [{
@@ -18,8 +18,8 @@ class PostSerializer < ActiveModel::Serializer
     object.user.profile_picture.url(:thumb)
   end
 
-  def user_name
-    object.user.name
+  def user
+    ActiveModelSerializers::SerializableResource.new object.user
   end
 
   def is_image
