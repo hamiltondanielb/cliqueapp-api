@@ -39,7 +39,7 @@ class PostsController < ApplicationController
   def update
     post = current_user.posts.find params[:id]
 
-    post.assign_attributes update_post_params
+    post.assign_attributes post_params
     post.prepare_tag_list
 
     if post.event.present? && params[:post][:event].present?
@@ -65,10 +65,6 @@ class PostsController < ApplicationController
   end
 
   protected
-  def update_post_params
-    params.require(:post).permit(:description, :tag_list)
-  end
-
   def post_params
     params.require(:post).permit(:description, :tag_list, :media)
   end
