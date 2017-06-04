@@ -2,18 +2,21 @@ require 'test_helper'
 
 class LikeTest < ActiveSupport::TestCase
   test "creates only one like for each user to each post" do
-    Like.create! user:users(:one), post:posts(:one)
+    user = create :user
+    post = create :post
+    Like.create! user:user, post:post
 
-    like = Like.new user:users(:one), post:posts(:one)
+    like = Like.new user:user, post:post
 
     refute like.save
   end
 
   test "calculates like count" do
-    assert_equal 0, posts(:one).like_count
+    post = create :post
+    assert_equal 0, post.like_count
 
-    Like.create! user:users(:one), post:posts(:one)
+    Like.create! user:create(:user), post:post
 
-    assert_equal 1, posts(:one).reload.like_count
+    assert_equal 1, post.reload.like_count
   end
 end

@@ -2,15 +2,17 @@ require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
   test "it doesn't allow users who have not accepted the instructor terms to create a paid event" do
-    params = posts(:one).attributes
-    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    user = create(:user, instructor_terms_accepted:false)
+    post = build :post
+    params = post.attributes
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
     params[:event] = {
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z",
       price: 100
     }
 
-    post posts_path, params: {post: params}, headers: authorization_header_for(users(:two))
+    post posts_path, params: {post: params}, headers: authorization_header_for(user)
 
     assert_equal 200, response.status, "#{response.status}: #{response.body[0,120]}"
     assert JSON.parse(response.body).include?('errors')
@@ -18,7 +20,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updates an event attached to a post" do
-    event = events(:one)
+    event = create :event
 
     patch post_path(event.post), params: {post: {event: {
       start_time: "2017-05-25T16:43:50.206Z",
@@ -43,8 +45,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creates a post attached to an event" do
-    params = posts(:one).attributes
-    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    post = build :post
+    params = post.attributes
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
     params[:event] = {
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z"
@@ -56,7 +59,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       lng: 123.1
     }
 
-    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+    post posts_path, params: {post: params}, headers: authorization_header_for(create :user)
 
     assert_equal 201, response.status, "#{response.status}: #{response.body[0,120]}"
     assert Post.last.event.present?
@@ -70,44 +73,50 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "serves feed from follows" do
-    users(:one).follows.create! followed_id: users(:two).id
+    post = create :post
+    user2 = create :user
+    user2.follows.create! followed: post.user
 
-    get posts_path, headers: authorization_header_for(users(:one))
+    get posts_path, headers: authorization_header_for(user2)
 
-    assert_equal users(:one).home_feed.map{|h|h["id"]}, JSON.parse(response.body).map{|h|h["id"]}
+    assert_equal [post.id], JSON.parse(response.body).map{|h|h["id"]}
   end
 
   test "serves user feed" do
-    get posts_path, params: {user_id: users(:one).id}
+    post = create :post
+
+    get posts_path, params: {user_id: post.user.id}
 
     assert response.successful?, response.status
-    assert users(:one).posts.any?
-    assert_equal users(:one).posts.map{|h|h["id"]}, JSON.parse(response.body).map{|h|h["id"]}
+    assert_equal [post.id], JSON.parse(response.body).map{|h|h["id"]}
   end
 
   test "deletes a post" do
-    delete post_path(posts(:one)), headers: authorization_header_for(posts(:one).user)
+    post = create :post
+    delete post_path(post), headers: authorization_header_for(post.user)
 
     assert_equal 204, response.status, response.status
-    refute Post.find_by(id: posts(:one).id), "post should have been deleted"
+    refute Post.find_by(id: post.id), "post should have been deleted"
   end
 
   test "updates a post" do
-    patch post_path(posts(:one)), params: {post: {description: "new description"}}, headers: authorization_header_for(posts(:one).user)
+    post = create :post
+    patch post_path(post), params: {post: {description: "new description"}}, headers: authorization_header_for(post.user)
 
     assert response.successful?, response.body
-    assert_equal "new description", posts(:one).reload.description, "body was #{response.body}"
+    assert_equal "new description", post.reload.description, "body was #{response.body}"
   end
 
   test "creates a post with an image" do
-    params = posts(:one).attributes
+    post = build :post
+    params = post.attributes
     params[:id] = nil
     params[:description] = "test post"
     params[:tag_list] = "cats, animals"
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/abstract-user.png"), "image/png")
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/abstract-user.png"), "image/png")
     params[:media] = file
 
-    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+    post posts_path, params: {post: params}, headers: authorization_header_for(post.user)
 
     assert_equal 201, response.status, "status was #{response.status}"
     assert_equal Post.last.description, "test post"
@@ -116,27 +125,23 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creates a post with a video" do
-    params = posts(:one).attributes
+    post = build :post
+    params = post.attributes
     params[:id] = nil
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
     params[:media] = file
 
-    post posts_path, params: {post: params}, headers: authorization_header_for(users(:one))
+    post posts_path, params: {post: params}, headers: authorization_header_for(post.user)
 
     assert_equal 201, response.status, "status was #{response.status}"
     refute Post.last.media.blank?
   end
 
   test "shows a post" do
-    get post_path(posts(:one))
+    post = create :post
+
+    get post_path(post)
 
     assert response.successful?
-  end
-
-  test "shows a user's feed" do
-    get posts_path(user_id: users(:one))
-
-    assert response.successful?
-    assert response.body.include?(posts(:one).description)
   end
 end

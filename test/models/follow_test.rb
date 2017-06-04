@@ -2,20 +2,22 @@ require 'test_helper'
 
 class FollowTest < ActiveSupport::TestCase
   test "creates only one follow" do
-    users(:one).follows.create! followed:users(:two)
+    user1 = create :user
+    user2 = create :user
+    user1.follows.create! followed:user2
 
-    duplicate = users(:one).follows.build followed:users(:two)
+    duplicate = user1.follows.build followed:user2
     refute duplicate.save
   end
 
   test "counts follows and followers" do
-    assert_equal 0, users(:one).following_count
-    assert_equal 0, users(:two).follower_count
+    user1 = create :user
+    user2 = create :user
 
-    users(:one).follows.create! followed:users(:two)
+    user1.follows.create! followed:user2
 
-    assert_equal 1, users(:one).reload.following_count
-    assert_equal 1, users(:two).reload.follower_count
+    assert_equal 1, user1.reload.following_count
+    assert_equal 1, user2.reload.follower_count
   end
 
 end

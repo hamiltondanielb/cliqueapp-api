@@ -2,16 +2,16 @@ require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
   test "it transcodes a MOV file to an MP4 with same audio and video tracks" do
-    post = posts(:one)
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    post = create :post
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
     post.update! media:file
 
     assert post.media.styles.include?(:mp4)
   end
 
   test "it serializes all video formats" do
-    post = posts(:one)
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/IMG_2746.MOV"), "video/quicktime")
+    post = create :post
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
     post.update! media:file
 
     json = ActiveModelSerializers::SerializableResource.new(post).as_json
@@ -22,7 +22,7 @@ class PostTest < ActiveSupport::TestCase
   end
 
   test "cleans and separates tag list" do
-    post = posts(:one)
+    post = create :post
     post.tag_list = ["cats , #dogs"]
 
     post.prepare_tag_list

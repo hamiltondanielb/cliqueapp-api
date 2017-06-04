@@ -2,18 +2,20 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "user signs in" do
-    post user_session_path, xhr:true, params: {user: {email: users(:one).email, password: '12345678'}}
+    user = create :user
+    post user_session_path, xhr:true, params: {user: {email: user.email, password: '12345678'}}
 
     assert response.successful?, response.body
     json = JSON.parse(response.body)
-    assert_equal users(:one).email, json['email'], "json was #{json}"
+    assert_equal user.email, json['email'], "json was #{json}"
     assert response.headers['Authorization'].include?('Bearer'), "headers were #{response.headers}"
   end
 
   test "user signs out" do
-    old_jti = users(:one).jti
+    user = create :user
+    old_jti = user.jti
 
-    post user_session_path, xhr:true, params: {user: {email: users(:one).email, password: '12345678'}}
+    post user_session_path, xhr:true, params: {user: {email: user.email, password: '12345678'}}
 
     assert response.successful?, response.body
 
@@ -22,7 +24,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     delete destroy_user_session_path, xhr:true, headers: {'Authorization' => "Bearer #{token}"}
 
     assert response.successful?
-    assert users(:one).reload.jti != old_jti, "jti should have changed after signing out"
+    assert user.reload.jti != old_jti, "jti should have changed after signing out"
   end
 
 end
