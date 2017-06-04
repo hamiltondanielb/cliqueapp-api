@@ -25,6 +25,10 @@ class User < ApplicationRecord
   has_many :event_registrations
   has_many :events, through: :event_registrations
 
+  def active_events
+    Event.joins(:event_registrations).where('event_registrations.cancelled_at':nil).where('event_registrations.user_id': self.id)
+  end
+
   def following_count
     follows.count
   end

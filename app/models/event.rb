@@ -13,7 +13,7 @@ class Event < ApplicationRecord
 
   def free?
     return true if price.nil?
-    
+
     !(price > 0)
   end
 
