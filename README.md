@@ -23,6 +23,19 @@ You can start the server by running `rails s`. If you want to run the API on a d
     rails s -p 4444
 
 
+In order to get all the features, you will need a few environment variables. Store the following in a file called `.env`:
+
+```
+DEVISE_JWT_SECRET_KEY=36fb2d3ad966bf8f75dddc1f4a1a5e6ed37ecdceea5461e0d9e2c25c80bc497aa9f576b2d0cc95e5a49e8ba7b67ccaa6c907e91610c56389969e30539659c696
+STRIPE_KEY=sk_test_SlTDoD7uUc3WUf2f94AphJGB
+APP_URL="http://localhost:3000"
+```
+
+And then restart the Rails server. The `dotenv` gem should pick up these environment variables automatically.
+
+It would be best if you used your own secret and Stripe key.
+
+
 # Test
 
 To run tests, just run:
