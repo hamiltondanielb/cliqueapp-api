@@ -18,4 +18,12 @@ class ActiveSupport::TestCase
   def mock_stripe_oauth_token
     require_relative 'mock_stripe_oauth_token'
   end
+
+  def assert_json_contains_errors string, field=nil
+    json = JSON.parse(string)
+    assert json.has_key?("errors"), "The JSON string did not contain errors"
+    if field.present?
+      assert json["errors"].has_key?(field.to_s), "The JSON string contained errors but not for the specified field: #{field}"
+    end
+  end
 end

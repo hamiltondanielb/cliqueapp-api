@@ -19,4 +19,8 @@ class EventRegistration < ApplicationRecord
   def active?
     !cancelled?
   end
+
+  def cancellable?
+    event.start_time > 24.hours.from_now
+  end
 end
