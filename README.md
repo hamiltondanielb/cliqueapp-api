@@ -15,6 +15,12 @@ You will also need to generate a secret for generating authentication tokens:
     echo DEVISE_JWT_SECRET_KEY=$(rake secret) > .env.local
 
 
+## Database Migrations
+
+In order to run the app, you will need to apply database migrations. You will need to do this once in the beginning but also as you go, if you pull down new database migrations from the repository. To update your development database, you can run:
+
+   rails db:migrate
+
 # Run
 
 
