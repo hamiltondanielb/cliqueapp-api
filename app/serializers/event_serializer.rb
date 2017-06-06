@@ -5,4 +5,7 @@ class EventSerializer < ActiveModel::Serializer
     ActiveModelSerializers::SerializableResource.new object.location
   end
 
+  def guests
+    object.active_guests
+  end
 end
