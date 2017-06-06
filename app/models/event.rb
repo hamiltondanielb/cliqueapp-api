@@ -8,7 +8,17 @@ class Event < ApplicationRecord
   validate :only_instructors_can_create_paid_events
 
   def guest_count
-    event_registrations.where(cancelled_at:nil).count
+    active_event_registrations.count
+  end
+
+  def active_event_registrations
+    event_registrations.where(cancelled_at:nil)
+  end
+
+  def active_guests
+    User.joins(:event_registrations)
+      .where('event_registrations.event_id':id)
+      .where('event_registrations.cancelled_at':nil)
   end
 
   def free?
