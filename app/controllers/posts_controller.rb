@@ -59,8 +59,11 @@ class PostsController < ApplicationController
 
   def destroy
     post = current_user.posts.find params[:id]
-    post.destroy!
-    head :no_content
+    if post.destroy
+      head :no_content, status: 204
+    else
+      render json: errors_hash_for(post)
+    end
   end
 
   protected

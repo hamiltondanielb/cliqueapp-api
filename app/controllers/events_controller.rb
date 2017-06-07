@@ -5,7 +5,7 @@ class EventsController < ApplicationController
 
     event.update! cancelled_at: Time.now
 
-    head :no_content
+    head :no_content, status: 204
   end
 
   def index
