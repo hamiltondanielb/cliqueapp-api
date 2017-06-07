@@ -47,7 +47,6 @@ And then restart the Rails server. The `dotenv` gem should pick up these environ
 
 It would be best if you used your own secret and Stripe key.
 
-
 # Test
 
 To run tests, just run:
@@ -68,3 +67,13 @@ Here's an example of creating a `staging` remote:
 Once that's done, you can push to staging like so:
 
     git push staging
+
+# FAQ
+
+#### If you're getting errors saying `SQLite3::BusyException: database is locked`, you should try running the server like so:
+
+    RAILS_MAX_THREADS=1 rails s -p 4444
+
+#### If you want to access the app on your phone, you will have to bind the rails server to the external interface like so:
+
+    rails s -p 4444 -b 0.0.0.0
