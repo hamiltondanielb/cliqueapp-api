@@ -5,7 +5,7 @@ class Event < ApplicationRecord
   has_many :guests, through: :event_registrations, source: :user
 
   validates :start_time, :end_time, presence:true
-  validate :only_instructors_can_create_paid_events
+  validate :only_instructors_can_create_events
 
   def guest_count
     active_event_registrations.count
@@ -28,9 +28,9 @@ class Event < ApplicationRecord
   end
 
   protected
-  def only_instructors_can_create_paid_events
-    if !free? && !post.user.instructor_terms_accepted?
-      self.errors.add :base, "You must become an instructor before charging for your events."
+  def only_instructors_can_create_events
+    if !post.user.instructor_terms_accepted?
+      self.errors.add :base, "You must become an instructor before creating events."
     end
   end
 end

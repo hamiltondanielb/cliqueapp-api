@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
-  test "it doesn't allow users who have not accepted the instructor terms to create a paid event" do
+  test "it doesn't allow users who have not accepted the instructor terms to create an event" do
     user = create(:user, instructor_terms_accepted:false)
     post = build :post
     params = post.attributes
@@ -16,7 +16,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 200, response.status, "#{response.status}: #{response.body[0,120]}"
     assert JSON.parse(response.body).include?('errors')
-    assert response.body.include?('become an instructor before charging')
+    assert response.body.include?('become an instructor before')
   end
 
   test "updates an event attached to a post" do
