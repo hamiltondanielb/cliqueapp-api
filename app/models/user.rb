@@ -38,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def event_count
-    organized_events.count
+    organized_events.active.count
   end
 
   def organized_events

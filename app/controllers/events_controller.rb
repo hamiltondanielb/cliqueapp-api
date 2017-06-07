@@ -1,5 +1,13 @@
 class EventsController < ApplicationController
 
+  def destroy
+    event = Event.find params[:id]
+
+    event.update! cancelled_at: Time.now
+
+    head :no_content
+  end
+
   def index
     return render(json: {errors: 'Please specify a date'}, status:400) if params[:date].blank?
     user = params[:user_id].present?? User.find(params[:user_id]) : current_user

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605113844) do
+ActiveRecord::Schema.define(version: 20170607135530) do
 
   create_table "event_registrations", force: :cascade do |t|
     t.integer "user_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20170605113844) do
     t.integer "difficulty_level"
     t.boolean "women_only", default: false
     t.decimal "price", precision: 8, scale: 2
+    t.datetime "cancelled_at"
     t.index ["post_id"], name: "index_events_on_post_id"
   end
 
@@ -77,6 +78,15 @@ ActiveRecord::Schema.define(version: 20170605113844) do
     t.integer "media_file_size"
     t.datetime "media_updated_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "registrations", force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_registrations_on_event_id"
+    t.index ["user_id"], name: "index_registrations_on_user_id"
   end
 
   create_table "taggings", force: :cascade do |t|

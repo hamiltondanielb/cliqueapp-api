@@ -6,6 +6,7 @@ class Post < ApplicationRecord
   validates :user, :media, presence:true
   has_many :likes, dependent: :destroy
   has_one :event, dependent: :destroy, autosave:true
+  before_destroy :ensure_no_event_before_destroying
 
   has_attached_file :media,
     styles: lambda { |a| a.instance.is_image? ?
@@ -42,5 +43,13 @@ class Post < ApplicationRecord
 
   def like_count
     likes.count
+  end
+
+  protected
+  def ensure_no_event_before_destroying
+    if event.present?
+      errors.add :base, "Cannot delete a post linked to an event"
+      throw :abort
+    end
   end
 end

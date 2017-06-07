@@ -7,6 +7,8 @@ class Event < ApplicationRecord
   validates :start_time, :end_time, presence:true
   validate :only_instructors_can_create_events
 
+  scope :active, -> {where(cancelled_at:nil)}
+
   def guest_count
     active_event_registrations.count
   end
@@ -25,6 +27,10 @@ class Event < ApplicationRecord
     return true if price.nil?
 
     !(price > 0)
+  end
+
+  def cancelled?
+    cancelled_at.present?
   end
 
   protected

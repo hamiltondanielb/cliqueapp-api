@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :users, only: [:update, :show]
   post '/users/connect_stripe', to: 'users#connect_stripe', as: 'connect_stripe'
   get '/events/days_with_activity', to: 'events#days_with_activity', as: 'days_with_activity'
-  resources :events, only: [:index] do
+  resources :events, only: [:index, :destroy] do
     resources :event_registrations, only: [:create]
   end
   resources :event_registrations, only: [:index]

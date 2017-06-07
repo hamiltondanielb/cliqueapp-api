@@ -1,6 +1,16 @@
 require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
+  test "it does not delete a post if it is linked to an event" do
+    post = create :post, event: create(:event)
+
+    refute post.destroy
+
+    post.update! event:nil
+
+    assert post.destroy
+  end
+
   test "it transcodes a MOV file to an MP4 with same audio and video tracks" do
     post = create :post
     file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")

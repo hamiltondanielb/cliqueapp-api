@@ -1,6 +1,14 @@
 require 'test_helper'
 
 class EventsControllerTest < ActionDispatch::IntegrationTest
+  test "cancels an event" do
+    event = create :event
+
+    delete event_path(event), headers: authorization_header_for(event.post.user)
+
+    assert event.reload.cancelled?
+  end
+
   test "lists days with activity for seven weeks from date" do
     user = create :user
     create :event, post: create(:post, user:user), start_time: 15.weeks.ago
