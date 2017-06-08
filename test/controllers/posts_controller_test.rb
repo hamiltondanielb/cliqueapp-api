@@ -5,7 +5,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     user = create(:user, instructor_terms_accepted:false)
     post = build :post
     params = post.attributes
-    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/abstract-user.png"), "image/png")
     params[:event] = {
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z",
@@ -47,7 +47,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "creates a post attached to an event" do
     post = build :post
     params = post.attributes
-    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
+    params[:media] = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/abstract-user.png"), "image/png")
     params[:event] = {
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z"
@@ -121,19 +121,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 201, response.status, "status was #{response.status}"
     assert_equal Post.last.description, "test post"
     assert_equal Post.last.tags.map(&:name), ["cats", "animals"]
-    refute Post.last.media.blank?
-  end
-
-  test "creates a post with a video" do
-    post = build :post
-    params = post.attributes
-    params[:id] = nil
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/IMG_2746.MOV"), "video/quicktime")
-    params[:media] = file
-
-    post posts_path, params: {post: params}, headers: authorization_header_for(post.user)
-
-    assert_equal 201, response.status, "status was #{response.status}"
     refute Post.last.media.blank?
   end
 
