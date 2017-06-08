@@ -2,6 +2,7 @@ class PaymentProcessor
   APPLICATION_FEE = 0.09
 
   raise "Please specify the STRIPE_KEY as an environment variable" unless ENV['STRIPE_KEY']
+  raise "Please specify the STRIPE_CLIENT_ID as an environment variable" unless ENV['STRIPE_CLIENT_ID']
   Stripe.api_key = ENV['STRIPE_KEY']
 
   def create_customer email, token
@@ -51,5 +52,10 @@ class PaymentProcessor
   def get_account_id authorization_code
     response = Stripe::OAuth.token code:authorization_code, grant_type:'authorization_code'
     response["stripe_user_id"]
+  end
+
+  def deauthorize account_id
+    account = Stripe::Account.retrieve account_id
+    account.deauthorize(ENV['STRIPE_CLIENT_ID'])
   end
 end

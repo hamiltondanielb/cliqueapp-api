@@ -1,6 +1,16 @@
 require 'test_helper'
 
 class PaymentProcessorTest < ActiveSupport::TestCase
+  test "deauthorizes an account" do
+    processor = PaymentProcessor.new
+
+    begin
+      assert processor.deauthorize "acct_test"
+    rescue Stripe::PermissionError
+      # It's hard to test this twice…
+    end
+  end
+
   test "creates a customer" do
     token = "tok_ca"
 

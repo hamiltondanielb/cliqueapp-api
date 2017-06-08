@@ -1,6 +1,15 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
+
+  setup do
+    mock_payment_processor
+  end
+
+  teardown do
+    unmock_payment_processor
+  end
+
   test "it updates the profile picture" do
     user = create :user, profile_picture:nil
 
@@ -21,4 +30,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert user.reload.stripe_account_id.present?
   end
 
+  test "it disconnects a user from their stripe account" do
+    user = create :user, stripe_account_id: "acct_test"
+
+    post disconnect_stripe_path, headers: authorization_header_for(user)
+
+    assert response.successful?, response.status
+    refute user.reload.stripe_account_id
+  end
 end

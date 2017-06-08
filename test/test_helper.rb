@@ -19,6 +19,15 @@ class ActiveSupport::TestCase
     require_relative 'mock_stripe_oauth_token'
   end
 
+  def mock_payment_processor
+    require 'payment_processor_mock'
+    ::PaymentProcessor.prepend PaymentProcessorMock
+  end
+
+  def unmock_payment_processor
+    PaymentProcessorMock.instance_methods.each{|m| PaymentProcessor.send :undef_method, m}
+  end
+
   def assert_json_contains_errors string, field=nil
     json = JSON.parse(string)
     assert json.has_key?("errors"), "The JSON string did not contain errors"

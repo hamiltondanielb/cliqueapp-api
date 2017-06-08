@@ -25,6 +25,17 @@ class UsersController < ApplicationController
      head :no_content
   end
 
+  def disconnect_stripe
+     begin
+       PaymentProcessor.new.deauthorize(current_user.stripe_account_id)
+       current_user.update! stripe_account_id: nil
+     rescue Exception => e
+       return render json: {errors: {"global": e.message}}
+     end
+
+     head :no_content
+  end
+
   private
 
   def user_params
