@@ -1,7 +1,9 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start unless ENV['NO_COVERAGE']
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'stripe_oauth_mock'
+require 'payment_processor_mock'
 
 class ActiveSupport::TestCase
   # Ignoring fixtures as we prefer using FactoryGirl
@@ -15,24 +17,11 @@ class ActiveSupport::TestCase
     {'Authorization' => "Bearer #{JWT.encode payload, ENV['DEVISE_JWT_SECRET_KEY'], 'HS256'}"}
   end
 
-  def mock_stripe_oauth_token
-    require_relative 'mock_stripe_oauth_token'
-  end
-
-  def mock_payment_processor
-    require 'payment_processor_mock'
-    ::PaymentProcessor.prepend PaymentProcessorMock
-  end
-
-  def unmock_payment_processor
-    PaymentProcessorMock.instance_methods.each{|m| PaymentProcessor.send :undef_method, m}
-  end
-
   def assert_json_contains_errors string, field=nil
     json = JSON.parse(string)
     assert json.has_key?("errors"), "The JSON string did not contain errors"
     if field.present?
-      assert json["errors"].has_key?(field.to_s), "The JSON string contained errors but not for the specified field: #{field}"
+      assert json["errors"].has_key?(field.to_s), "The JSON string contained errors but not for the specified field: #{field}. The JSON was #{json}"
     end
   end
 end

@@ -7,19 +7,20 @@ class EventRegistrationsController < ApplicationController
 
   def create
     event = Event.find params[:event_id]
+    charge = OpenStruct.new id:nil, amount:nil
 
     if !event.free?
       begin
         processor = PaymentProcessor.new
         current_user.update! stripe_customer_id: processor.create_customer(params[:stripe_info][:email], params[:stripe_info][:id]).id
         charge = processor.charge event.price.to_i, current_user.stripe_customer_id
-        current_user.event_registrations.create! event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount
       rescue Exception => e
-        return render json: {errors: {base: "We could not process the payment: #{e}"}}
+        Rails.logger.warn "Could not charge user: #{e}"
+        return render json: {errors: {global: "We could not process the payment: #{e}"}}
       end
-    else
-      current_user.event_registrations.create! event_id: params[:event_id]
     end
+
+    current_user.event_registrations.create! event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount
 
     head :no_content
   end
@@ -27,16 +28,23 @@ class EventRegistrationsController < ApplicationController
   def destroy
     event_registration = current_user.event_registrations.active.find_by(event_id: params[:event_id])
 
-    if event_registration.incurred_charge?
-      if event_registration.cancellable?
-        refund = PaymentProcessor.new.refund event_registration.charge_id
-        event_registration.update! refunded_at: Time.now, cancelled_at: Time.now, refund_id: refund.id
-      else
-        return render json: {errors: {base: "This event registration cannot be cancelled."}}
-      end
-    else
+    if !event_registration.incurred_charge?
       event_registration.update! cancelled_at: Time.now
+      return head :no_content
     end
+
+    if !event_registration.cancellable?
+      return render json: {errors: {global: "This event registration cannot be cancelled."}}
+    end
+
+    begin
+      refund = PaymentProcessor.new.refund event_registration.charge_id
+    rescue Exception => e
+      Rails.logger.warn "Could not refund user: #{e}"
+      return render json: {errors: {global: "We could not process the payment: #{e}"}}
+    end
+
+    event_registration.update! refunded_at: Time.now, cancelled_at: Time.now, refund_id: refund.id
 
     head :no_content
   end

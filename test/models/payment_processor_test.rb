@@ -45,7 +45,7 @@ class PaymentProcessorTest < ActiveSupport::TestCase
   end
 
   test "it retrieves account id" do
-    mock_stripe_oauth_token
+    StripeOAuthMock.mock
 
     processor = PaymentProcessor.new
     assert processor.get_account_id("code")
