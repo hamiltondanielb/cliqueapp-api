@@ -2,6 +2,7 @@ module StripeOAuthMock
   def self.unmock
     if ::Stripe::OAuth.respond_to? :orig_token
       puts "unmocking"
+      $stdout.flush
       class << ::Stripe::OAuth
         undef_method :token
         alias_method :token, :orig_token
@@ -13,6 +14,7 @@ module StripeOAuthMock
   def self.mock
     return if ::Stripe::OAuth.respond_to?(:orig_token)
     puts "mocking"
+    $stdout.flush
 
     class << ::Stripe::OAuth
       alias_method :orig_token, :token

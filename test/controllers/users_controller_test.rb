@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
+  i_suck_and_my_tests_are_order_dependent! # seems to make the mocks less brittle
 
   teardown do
     StripeOAuthMock.unmock
