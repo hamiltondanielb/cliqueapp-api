@@ -79,7 +79,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get posts_path, headers: authorization_header_for(user2)
 
-    assert_equal [post.id], JSON.parse(response.body).map{|h|h["id"]}
+    assert_equal [post.id], JSON.parse(response.body)['posts'].map{|h|h["id"]}
   end
 
   test "serves user feed" do
@@ -88,7 +88,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get posts_path, params: {user_id: post.user.id}
 
     assert response.successful?, response.status
-    assert_equal [post.id], JSON.parse(response.body).map{|h|h["id"]}
+    assert_equal [post.id], JSON.parse(response.body)['posts'].map{|h|h["id"]}
   end
 
   test "deletes a post" do

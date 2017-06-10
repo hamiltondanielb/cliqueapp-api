@@ -3,12 +3,14 @@ class PostsController < ApplicationController
 
   def index
     if params.include? :user_id
-      render json: User.find(params[:user_id]).posts.order('created_at DESC')
+      posts = User.find(params[:user_id]).posts.order('created_at DESC')
     elsif current_user && current_user.follows.any?
-      render json: current_user.home_feed
+      posts = current_user.home_feed
     else
-      render json: Post.order('created_at DESC').limit(20)
+      posts = Post.order('created_at DESC').limit(20)
     end
+
+    render json: {posts: ActiveModelSerializers::SerializableResource.new(posts)}
   end
 
   def show

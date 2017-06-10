@@ -2,11 +2,11 @@ class FollowsController < ApplicationController
   before_action :authorize_user!, except: [:followers, :following]
 
   def followers
-    render json: User.find(params[:user_id]).follower_users
+    render json: {users: User.find(params[:user_id]).follower_users}
   end
 
   def following
-    render json: User.find(params[:user_id]).following_users
+    render json: {users: User.find(params[:user_id]).following_users}
   end
 
   def create
