@@ -16,3 +16,7 @@ deployment:
       - git push git@heroku.com:open-lesson-api-staging.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rails db:migrate --app open-lesson-api-staging
       - heroku maintenance:off --app open-lesson-api-staging
+
+general:
+  artifacts:
+    - "coverage"

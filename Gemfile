@@ -22,6 +22,7 @@ gem 'pry-rescue'
 gem 'devise', :git => 'https://github.com/plataformatec/devise.git'
 gem 'devise-jwt'
 gem 'minitest', "5.10.1", group: [:test]  # unpin next time rails is updated
+gem 'minitest-ci', group: [:test]
 gem 'rails', '~> 5.1.0'
 gem 'sqlite3', group: [:development, :test]
 gem 'pg', group: [:production]
