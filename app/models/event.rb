@@ -12,7 +12,22 @@ class Event < ApplicationRecord
   scope :active, -> {where(cancelled_at:nil)}
 
   def self.perform_payouts! currency:"JPY"
-    to_be_paid_out.each {|e| e.pay_out! currency:currency}
+    errors = []
+
+    events = to_be_paid_out
+
+    events.each do |e|
+      begin
+        e.pay_out! currency:currency
+      rescue
+        Rails.logger.error("Could not pay out event id##{e.id}: #{$!} -- #{$!.backtrace}")
+        errors << $!
+      end
+    end
+
+    raise "There were #{errors.length} error(s) performing payouts" if errors.any?
+
+    events
   end
 
   def self.to_be_paid_out
@@ -23,13 +38,8 @@ class Event < ApplicationRecord
   end
 
   def pay_out! currency:"JPY"
-    begin
-      payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, currency:currency
-      self.update! paid_out_at: Time.now, payout_id: payout.id
-    rescue
-      Rails.logger.error("Could not pay out event id##{id}: #{$!}")
-      raise
-    end
+    payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, currency:currency
+    self.update! paid_out_at: Time.now, payout_id: payout.id
   end
 
   def total_paid
