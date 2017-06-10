@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'newrelic_rpm'
 gem 'factory_girl_rails', groups: [:development, :test]
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'simplecov', :require => false, :group => :test
@@ -20,7 +21,7 @@ gem 'pry-nav'
 gem 'pry-rescue'
 gem 'devise', :git => 'https://github.com/plataformatec/devise.git'
 gem 'devise-jwt'
-gem 'minitest', "5.10.1" # unpin next time rails is updated
+gem 'minitest', "5.10.1", group: [:test]  # unpin next time rails is updated
 gem 'rails', '~> 5.1.0'
 gem 'sqlite3', group: [:development, :test]
 gem 'pg', group: [:production]
