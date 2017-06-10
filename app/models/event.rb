@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  DAYS_BETWEEN_EVENT_AND_PAYOUT = 2
+
   belongs_to :post
   has_one :location, dependent: :destroy, autosave:true
   has_many :event_registrations, dependent: :destroy
@@ -8,6 +10,31 @@ class Event < ApplicationRecord
   validate :only_instructors_can_create_events
 
   scope :active, -> {where(cancelled_at:nil)}
+
+  def self.perform_payouts! currency:"JPY"
+    to_be_paid_out.each {|e| e.pay_out! currency:currency}
+  end
+
+  def self.to_be_paid_out
+    Event.where(paid_out_at:nil)
+      .where(cancelled_at:nil)
+      .where('price is not null and price > 0')
+      .where('start_time < ?', DAYS_BETWEEN_EVENT_AND_PAYOUT.days.ago)
+  end
+
+  def pay_out! currency:"JPY"
+    begin
+      payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, currency:currency
+      self.update! paid_out_at: Time.now, payout_id: payout.id
+    rescue
+      Rails.logger.error("Could not pay out event id##{id}: #{$!}")
+      raise
+    end
+  end
+
+  def total_paid
+    active_event_registrations.map(&:amount_paid).sum
+  end
 
   def guest_count
     active_event_registrations.count
@@ -31,6 +58,10 @@ class Event < ApplicationRecord
 
   def cancelled?
     cancelled_at.present?
+  end
+
+  def paid_out?
+    paid_out_at.present?
   end
 
   protected

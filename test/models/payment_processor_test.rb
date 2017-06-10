@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class PaymentProcessorTest < ActiveSupport::TestCase
+  def teardown
+    StripeOAuthMock.unmock
+  end
+
   test "deauthorizes an account" do
     processor = PaymentProcessor.new
 
@@ -34,14 +38,14 @@ class PaymentProcessorTest < ActiveSupport::TestCase
     assert processor.refund charge
   end
 
-  test "it performs a payout minus application fee" do
+  test "it performs a payout minus a 3.6% application fee" do
     processor = PaymentProcessor.new
 
     processor.charge 1000, "cus_AlqetMhwaNl8lg"
-    payout = processor.payout 1000, "acct_1APr3BLdGggRtZJo", currency:"EUR"
+    payout = processor.pay_out 1000, "acct_1APr3BLdGggRtZJo", currency:"EUR"
 
     assert payout, "there should have been a payout"
-    assert_equal 910, payout["amount"]
+    assert_equal 964, payout["amount"]
   end
 
   test "it retrieves account id" do

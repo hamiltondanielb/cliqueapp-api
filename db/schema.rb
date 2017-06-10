@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607135530) do
+ActiveRecord::Schema.define(version: 20170610125636) do
 
   create_table "event_registrations", force: :cascade do |t|
     t.integer "user_id"
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20170607135530) do
     t.boolean "women_only", default: false
     t.decimal "price", precision: 8, scale: 2
     t.datetime "cancelled_at"
+    t.datetime "paid_out_at"
+    t.string "payout_id"
     t.index ["post_id"], name: "index_events_on_post_id"
   end
 

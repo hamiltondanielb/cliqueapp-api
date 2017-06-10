@@ -1,5 +1,5 @@
 class PaymentProcessor
-  APPLICATION_FEE = 0.09
+  APPLICATION_FEE = 3.6
 
   raise "Please specify the STRIPE_KEY as an environment variable" unless ENV['STRIPE_KEY']
   raise "Please specify the STRIPE_CLIENT_ID as an environment variable" unless ENV['STRIPE_CLIENT_ID']
@@ -27,10 +27,10 @@ class PaymentProcessor
     end
   end
 
-  def payout amount, account_id, currency:"JPY"
+  def pay_out amount, account_id, currency:"JPY"
     begin
       return Stripe::Transfer.create({
-        :amount => (amount*(1-APPLICATION_FEE)).to_i,
+        :amount => (amount*(1-APPLICATION_FEE/100)).to_i,
         :currency => currency,
         :destination => account_id
       })
