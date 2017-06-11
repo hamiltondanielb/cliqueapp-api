@@ -77,3 +77,9 @@ Once that's done, you can push to staging like so:
 #### If you want to access the app on your phone, you will have to bind the rails server to the external interface like so:
 
     rails s -p 4444 -b 0.0.0.0
+
+#### I pulled down new changes and now my codebase doesn't work. What should I do?
+
+- Run `bundle install`
+- Run `rails db:migrate`
+- Make sure you have all the necessary environment variables set up (see above)
