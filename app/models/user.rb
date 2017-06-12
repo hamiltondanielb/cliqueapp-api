@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include PgSearch
+  multisearchable :against => [:name]
   include S3Credentials
   include Devise::JWT::RevocationStrategies::JTIMatcher
 

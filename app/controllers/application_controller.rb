@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def using_postgresql?
+    ActiveRecord::Base.connection.adapter_name.downcase == "postgresql"
+  end
+
   def set_locale
     I18n.locale = params[:locale] || accept_locale(request.env) || I18n.default_locale
     I18n.locale = I18n.default_locale unless I18n.available_locales.include?(I18n.locale)

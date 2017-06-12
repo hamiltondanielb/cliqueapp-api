@@ -1,4 +1,7 @@
 class Post < ApplicationRecord
+  include PgSearch
+  multisearchable :against => [:description]
+
   belongs_to :user
   include S3Credentials
   acts_as_ordered_taggable

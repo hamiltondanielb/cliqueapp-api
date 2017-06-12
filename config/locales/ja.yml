@@ -11,12 +11,12 @@ ja:
     sending_error: "メール送信中にエラーが発生しました。"
 
 
-# Japanese translations for Ruby on Rails
-# by Akira Matsuda (ronnie@dio.jp)
-# AR error messages are basically taken from Ruby-GetText-Package. Thanks to
-# Masao Mutoh.
-# NOTE: For future use:
-# This has bank transaction related parameters: https://github.com/yalab/anmitsu/blob/master/config/locales/ja.yml
+  # Japanese translations for Ruby on Rails
+  # by Akira Matsuda (ronnie@dio.jp)
+  # AR error messages are basically taken from Ruby-GetText-Package. Thanks to
+  # Masao Mutoh.
+  # NOTE: For future use:
+  # This has bank transaction related parameters: https://github.com/yalab/anmitsu/blob/master/config/locales/ja.yml
 
   direction: ltr
   date:
@@ -127,7 +127,7 @@ ja:
           gb: "GB"
           tb: "TB"
 
-# Used in array.to_sentence.
+  # Used in array.to_sentence.
   support:
     array:
       sentence_connector: "及び"

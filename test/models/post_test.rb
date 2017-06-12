@@ -6,7 +6,7 @@ class PostTest < ActiveSupport::TestCase
 
     refute post.destroy
 
-    post.update! event:nil
+    post.reload.update! event:nil
 
     assert post.destroy
   end

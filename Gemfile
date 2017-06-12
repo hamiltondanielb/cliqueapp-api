@@ -25,7 +25,9 @@ gem 'minitest', "5.10.1", group: [:test]  # unpin next time rails is updated
 gem 'minitest-ci', group: [:test]
 gem 'rails', '~> 5.1.0'
 gem 'sqlite3', group: [:development, :test]
-gem 'pg', group: [:production]
+gem 'pg'
+gem 'pg_search'
+gem 'kaminari'
 gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
