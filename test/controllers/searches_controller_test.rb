@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class SearchesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    ActiveRecord::Base.connection.execute("create extension if not exists pg_trgm;") if using_postgresql?  
+  end
+
   test "gives random search results on sqlite" do
     skip("Skipping this test as we are not running SQLite") if using_postgresql?
 
@@ -18,7 +22,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
   test "it finds a user" do
     skip(reason) if !using_postgresql?
 
-    user = create :user, name: "Nicole"
+    create :user, name: "Nicole"
     create :user, name: "Alex"
 
     get search_path, params: {term: "icol"}
