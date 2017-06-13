@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
+  
   test "performs payouts" do
     event = create :event, price:100, start_time: 3.days.ago
     event.post.user.update! stripe_account_id: "acct_1APr3BLdGggRtZJo"
