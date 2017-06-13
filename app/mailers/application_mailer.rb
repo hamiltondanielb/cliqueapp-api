@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'no-reply@openlesson.jp'
+  default from: 'OpenLesson <no-reply@openlesson.jp>'
   layout 'mailer'
 end
