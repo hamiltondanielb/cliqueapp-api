@@ -1,0 +1,28 @@
+%style
+  main#email {max-width:640px; font-weight:300; margin: 15px auto; font-family: Avenir, Verdana, sans-serif;}
+  main#email header {display:flex;}
+  main#email header img {max-height:30px; margin:auto;}
+  main#email .signature {font-weight:bold; font-size:90%;}
+%main#email
+  %header
+    = image_tag @logo_data_uri
+
+  %h3
+    = "Hello#{@user.name.present?? " #{@user.name}," : ',' }"
+
+  %p
+    This is just to let you know, an event you signed up for was unfortunately cancelled by the organizer:
+
+  %p
+    = link_to truncate(@event_registration.event.post.description, length: 50), event_registration_url(@event_registration)
+
+  - if @event_registration.refunded?
+    %p You have been refunded the attendance fee.
+  - elsif @event_registration.incurred_charge?
+    %p You will be refunded shortly.
+
+  %p Thank you,
+
+  %br
+  %p —
+  %p.signature The OpenLesson Team

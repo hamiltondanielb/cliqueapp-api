@@ -28,13 +28,14 @@ class EventRegistration < ApplicationRecord
   end
 
   def self.to_be_refunded
-    EventRegistration.where(refunded_at:nil).joins(:event).where('events.cancelled_at is not null')
+    EventRegistration.where.not(charge_id:nil)
+      .where(refunded_at:nil)
+      .joins(:event).where('events.cancelled_at is not null')
   end
 
   def self.notify_of_cancellations!
     unnotified_cancellations.each do |event_registration|
-      # send email
-
+      CancellationNotificationMailer.notify_of_cancellation(event_registration).deliver_now
       event_registration.update! cancellation_notified_at:Time.now
     end
   end

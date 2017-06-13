@@ -25,7 +25,7 @@ class EventRegistrationTest < ActiveSupport::TestCase
     cancelled = create :event, price:100, start_time: 3.days.ago, cancelled_at:1.day.ago
     happening = create :event, price:100, start_time: 3.days.ago
 
-    to_be_refunded = create :event_registration, event:cancelled, refunded_at:nil
+    to_be_refunded = create :event_registration, event:cancelled, refunded_at:nil, charge_id:"test"
     create :event_registration, event:cancelled, refunded_at:Time.now
     create :event_registration, event:happening
 
