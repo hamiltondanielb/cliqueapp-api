@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   include PgSearch
-  multisearchable :against => [:name]
+  multisearchable :against => [:name, :bio]
   include S3Credentials
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
@@ -48,6 +48,6 @@ class User < ApplicationRecord
   end
 
   def home_feed
-    Post.order('created_at DESC').where('user_id in (?)', follows.map(&:followed_id)).limit(20)
+    Post.order('created_at DESC').where('user_id in (?)', follows.map(&:followed_id) + [id]).limit(20)
   end
 end

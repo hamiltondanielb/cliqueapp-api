@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  test "includes own posts in home feed" do
+    user = create :user
+    post = create :post, user:user
+
+    assert_equal [post], user.home_feed  
+  end
+
   test "does not include cancelled events in event count" do
     user = create :user
     post = create :post, user:user
