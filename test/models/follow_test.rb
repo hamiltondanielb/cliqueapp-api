@@ -1,6 +1,17 @@
 require 'test_helper'
 
 class FollowTest < ActiveSupport::TestCase
+  test "users cannot follow themselves" do
+    user1 = create :user
+    follow = user1.follows.build followed:user1
+
+    refute follow.save
+
+    follow.followed = create(:user)
+
+    assert follow.save
+  end
+
   test "creates only one follow" do
     user1 = create :user
     user2 = create :user
