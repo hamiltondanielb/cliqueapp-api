@@ -7,6 +7,6 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
     assert response.successful?, "body was #{response.body}"
     assert response.headers['Authorization'].start_with?('Bearer')
-    assert_equal 'test@example.org', JSON.parse(response.body)['email'], response.body
+    assert_equal 'tester', JSON.parse(response.body)['name'], response.body
   end
 end

@@ -7,7 +7,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert response.successful?, response.body
     json = JSON.parse(response.body)
-    assert_equal user.email, json['email'], "json was #{json}"
+    assert_equal user.name, json['name'], "json was #{json}"
     assert response.headers['Authorization'].include?('Bearer'), "headers were #{response.headers}"
   end
 
