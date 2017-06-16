@@ -1,14 +1,16 @@
 class Post < ApplicationRecord
-  include PgSearch
-  multisearchable :against => [:description]
+  include Searchable
+  include S3Credentials
 
   belongs_to :user
-  include S3Credentials
-  acts_as_ordered_taggable
-
-  validates :user, :media, presence:true
   has_many :likes, dependent: :destroy
   has_one :event, dependent: :destroy, autosave:true
+  has_one :location, through: :event
+
+  search_scope :post_search, against: :description, associated_against: {location: [:label, :address]}
+
+  acts_as_ordered_taggable
+  validates :user, :media, presence:true
   before_destroy :ensure_no_event_before_destroying
 
   has_attached_file :media,
@@ -19,6 +21,10 @@ class Post < ApplicationRecord
     s3_region: ENV['S3_REGION']
 
   validates_attachment_content_type :media, content_type: [/\Aimage\/.*\z/]
+
+  def self.search *args
+    Post.joins(:event).where.not(events_posts: {post_id: nil}).post_search(*args)
+  end
 
   def is_image?
     !! (media.content_type =~ /\Aimage/)

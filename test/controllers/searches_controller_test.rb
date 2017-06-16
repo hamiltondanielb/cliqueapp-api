@@ -2,20 +2,18 @@ require 'test_helper'
 
 class SearchesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    ActiveRecord::Base.connection.execute("create extension if not exists pg_trgm;") if using_postgresql?  
+    ActiveRecord::Base.connection.execute("create extension if not exists pg_trgm;") if using_postgresql?
   end
 
   test "gives random search results on sqlite" do
     skip("Skipping this test as we are not running SQLite") if using_postgresql?
 
-    create :user, name: "Nicole"
-    create :post, description: "Alex"
+    create :post, description: "Nicole"
 
-    get search_path, params: {term: "icol"}
+    get event_search_path, params: {term: "icol"}
 
     assert response.body.include?("Nicole")
     json = JSON.parse(response.body)
-    assert json["users"][0]["createdAt"]
     assert json["posts"][0]["createdAt"]
   end
 
@@ -25,7 +23,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     create :user, name: "Nicole"
     create :user, name: "Alex"
 
-    get search_path, params: {term: "icol"}
+    get user_search_path, params: {term: "icol"}
 
     assert_equal 200, response.status
     assert response.body.include?("Nicole")
@@ -33,17 +31,19 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
 
     json = JSON.parse(response.body)
     assert_equal 1, json["users"].length
-    assert json["users"][0]["createdAt"]
-    refute json["posts"]
   end
 
-  test "it finds a post" do
+  test "it finds an event through the post's description" do
     skip(reason) if !using_postgresql?
 
-    post = create :post, description: "Nicole"
-    create :post, description: "Alex"
+    event = create :event
+    event.post.update! description: "Nicole"
+    create :post, description: "Nicole again", event:nil
 
-    get search_path, params: {term: "icol"}
+    event2 = create :event
+    event2.post.update! description: "Alex"
+
+    get event_search_path, params: {term: "icol"}
 
     assert_equal 200, response.status
     assert response.body.include?("Nicole")
@@ -51,26 +51,23 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
 
     json = JSON.parse(response.body)
     assert_equal 1, json["posts"].length
-    assert json["posts"][0]["createdAt"]
-    refute json["users"]
   end
 
-  test "it finds multiple models" do
+  test "it finds an event through the event's location" do
     skip(reason) if !using_postgresql?
 
-    create :user, name: "Nicole"
-    create :user, name: "Alicia"
-    create :post, description: "Bob"
-    create :post, description: "Alicine"
+    event = create :event
+    event.update! location: create(:location, label: 'Studio', address: '123 Main St')
+    event2 = create :event
+    event2.update! location: create(:location, label: 'Gym', address: '456 Maple St')
 
-    get search_path, params: {term: "lici"}
+    get event_search_path, params: {term: "tudio"}
 
     assert_equal 200, response.status
-    assert response.body.include?("Alicia")
-    assert response.body.include?("Alicine")
+    assert response.body.include?("Studio")
+    refute response.body.include?("Gym")
 
     json = JSON.parse(response.body)
-    assert_equal 1, json["users"].length
     assert_equal 1, json["posts"].length
   end
 
@@ -79,7 +76,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
 
     create :user, name: "Nicole"
 
-    get search_path, params: {term: "Nicole"}
+    get user_search_path, params: {term: "Nicole"}
 
     assert_equal 200, response.status
     json = JSON.parse(response.body)

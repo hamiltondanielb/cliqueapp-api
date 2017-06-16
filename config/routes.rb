@@ -24,5 +24,6 @@ Rails.application.routes.draw do
   get '/users/:user_id/followers', to: 'follows#followers', as: 'followers'
   get '/users/:user_id/following', to: 'follows#following', as: 'following'
 
-  get '/search', to: 'searches#search', as: 'search'
+  get '/search/users', to: 'searches#user_search', as: 'user_search'
+  get '/search/events', to: 'searches#event_search', as: 'event_search'
 end
