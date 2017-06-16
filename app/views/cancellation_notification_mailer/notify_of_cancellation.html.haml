@@ -8,21 +8,21 @@
     = image_tag @logo_data_uri
 
   %h3
-    = "Hello#{@user.name.present?? " #{@user.name}," : ',' }"
+    = "#{@user.name.present?? " #{@user.name}様" : '　' }"
 
   %p
-    This is just to let you know, an event you signed up for was unfortunately cancelled by the organizer:
+    大変申し訳ございませんが、お申し込みされた下記のイベントは主催者の都合によりキャンセルとさせて頂きます。
 
   %p
     = link_to truncate(@event_registration.event.post.description, length: 50), event_registration_url(@event_registration)
 
   - if @event_registration.refunded?
-    %p You have been refunded the attendance fee.
+    %p また参加費は、全額返金処理が完了しております。
   - elsif @event_registration.incurred_charge?
-    %p You will be refunded shortly.
+    %p また参加費は、間もなく全額返金処理が完了します。
 
-  %p Thank you,
+  %p ご理解のほどよろしくお願い致します。
 
   %br
   %p —
-  %p.signature The OpenLesson Team
+  %p.signature openlesson
