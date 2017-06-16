@@ -1,0 +1,11 @@
+%h3
+  = "#{@user.name.present?? " #{@user.name}様" : '　' }"
+
+%p
+  = "You received a new payout of #{number_to_currency @event.payout_sum, unit: @event.payout_currency.try(:upcase)}."
+
+%p
+  = "For your reference, the payout id is #{@event.payout_id}."
+
+%p
+  Thanks for making OpenLesson a great platform!

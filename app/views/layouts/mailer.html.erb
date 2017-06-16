@@ -12,6 +12,17 @@
   </head>
 
   <body>
-    <%= yield %>
+    <main id="email">
+      <header>
+        <%= image_tag @logo_data_uri %>
+      </header>
+
+      <%= yield %>
+
+      <br/>
+      <p>— </p>
+      <p class="signature">openlesson</p>
+    </main>
+
   </body>
 </html>

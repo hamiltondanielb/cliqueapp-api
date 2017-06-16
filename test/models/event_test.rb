@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
-  
+
   test "performs payouts" do
     event = create :event, price:100, start_time: 3.days.ago
     event.post.user.update! stripe_account_id: "acct_1APr3BLdGggRtZJo"
@@ -12,6 +12,8 @@ class EventTest < ActiveSupport::TestCase
     event.reload
     assert event.paid_out?
     assert event.payout_id
+    assert event.payout_currency
+    assert event.payout_sum
   end
 
   test "handles error if paying out fails" do

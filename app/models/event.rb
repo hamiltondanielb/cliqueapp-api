@@ -19,6 +19,7 @@ class Event < ApplicationRecord
     events.each do |e|
       begin
         e.pay_out! currency:currency
+        UserMailer.inform_of_payout(e).deliver_now
       rescue
         Rails.logger.error("Could not pay out event id##{e.id}: #{$!} -- #{$!.backtrace}")
         errors << $!
@@ -39,7 +40,7 @@ class Event < ApplicationRecord
 
   def pay_out! currency:"JPY"
     payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, currency:currency
-    self.update! paid_out_at: Time.now, payout_id: payout.id
+    self.update! paid_out_at: Time.now, payout_id: payout.id, payout_sum: payout.amount, payout_currency: payout.currency
   end
 
   def total_paid

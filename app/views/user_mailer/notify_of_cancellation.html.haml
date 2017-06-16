@@ -1,23 +1,15 @@
-%main#email
-  %header
-    = image_tag @logo_data_uri
+%h3
+  = "#{@user.name.present?? " #{@user.name}様" : '　' }"
 
-  %h3
-    = "#{@user.name.present?? " #{@user.name}様" : '　' }"
+%p
+  大変申し訳ございませんが、お申し込みされた下記のイベントは主催者の都合によりキャンセルとさせて頂きます。
 
-  %p
-    大変申し訳ございませんが、お申し込みされた下記のイベントは主催者の都合によりキャンセルとさせて頂きます。
+%p
+  = link_to truncate(@event_registration.event.post.description, length: 50), event_registration_url(@event_registration)
 
-  %p
-    = link_to truncate(@event_registration.event.post.description, length: 50), event_registration_url(@event_registration)
+- if @event_registration.refunded?
+  %p また参加費は、全額返金処理が完了しております。
+- elsif @event_registration.incurred_charge?
+  %p また参加費は、間もなく全額返金処理が完了します。
 
-  - if @event_registration.refunded?
-    %p また参加費は、全額返金処理が完了しております。
-  - elsif @event_registration.incurred_charge?
-    %p また参加費は、間もなく全額返金処理が完了します。
-
-  %p ご理解のほどよろしくお願い致します。
-
-  %br
-  %p —
-  %p.signature openlesson
+%p ご理解のほどよろしくお願い致します。

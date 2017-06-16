@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613111153) do
+ActiveRecord::Schema.define(version: 20170616134441) do
 
   create_table "event_registrations", force: :cascade do |t|
     t.integer "user_id"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 20170613111153) do
     t.datetime "cancelled_at"
     t.datetime "paid_out_at"
     t.string "payout_id"
+    t.decimal "payout_sum", precision: 8, scale: 2
+    t.string "payout_currency"
     t.index ["post_id"], name: "index_events_on_post_id"
   end
 
