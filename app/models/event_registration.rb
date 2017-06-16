@@ -35,7 +35,7 @@ class EventRegistration < ApplicationRecord
 
   def self.notify_of_cancellations!
     unnotified_cancellations.each do |event_registration|
-      CancellationNotificationMailer.notify_of_cancellation(event_registration).deliver_now
+      UserMailer.notify_of_cancellation(event_registration).deliver_now
       event_registration.update! cancellation_notified_at:Time.now
     end
   end

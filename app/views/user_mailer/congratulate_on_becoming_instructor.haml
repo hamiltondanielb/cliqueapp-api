@@ -1,0 +1,19 @@
+%main#email
+  %header
+    = image_tag @logo_data_uri
+
+  %h3
+    = "#{@user.name.present?? " #{@user.name}様" : '　' }"
+
+  %p
+    Welcome to the OpenLesson instructor community!
+
+  %p
+    You can now organize events and accept sign-ups directly on OpenLesson.
+
+  %p
+    Good luck and thanks for making OpenLesson a great platform.
+
+  %br
+  %p —
+  %p.signature openlesson

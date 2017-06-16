@@ -18,6 +18,7 @@ class UsersController < ApplicationController
 
      begin
        current_user.update! stripe_account_id: PaymentProcessor.new.get_account_id(authorization_code)
+       UserMailer.congratulate_on_becoming_instructor(current_user).deliver_now
      rescue Exception => e
        return render json: {errors: {"global": e.message}}
      end

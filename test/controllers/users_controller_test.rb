@@ -48,6 +48,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "it connects a user with their stripe account" do
     StripeOAuthMock.mock
+    ActionMailer::Base.deliveries.clear
 
     user = create :user, stripe_account_id:nil
 
@@ -55,6 +56,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 204, response.status, response.status
     assert user.reload.stripe_account_id.present?
+    assert_equal 1, ActionMailer::Base.deliveries.length
   end
 
   test "it disconnects a user from their stripe account" do
