@@ -2,10 +2,10 @@
   = "#{@user.name.present?? " #{@user.name}様" : '　' }"
 
 %p
-  = "You received a new payout of #{number_to_currency @event.payout_sum, unit: @event.payout_currency.try(:upcase)}."
+  = "#{number_to_currency @event.payout_sum, unit: @event.payout_currency.try(:upcase)}の支払い受領完了のお知らせ。"
 
 %p
-  = "For your reference, the payout id is #{@event.payout_id}."
+  = "受領idは#{@event.payout_id}です。"
 
 %p
-  Thanks for making OpenLesson a great platform!
+  openlessonをご利用頂きありがとうございます!
