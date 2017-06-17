@@ -38,3 +38,9 @@ en:
     resend: Resend confirmation link
     confirmation_error: We could not confirm your account.
     sending_error: We could not send you the confirmation instructions.
+
+  email:
+    subject:
+      event_cancelled: "OpenLesson: An event was cancelled"
+      congratulate_on_becoming_instructor: "OpenLesson: Congratulations on becoming an instructor"
+      payout_received: "OpenLesson: You received a new payout"

@@ -2,6 +2,12 @@ ja:
   test:
     locale: 'Your locale is set to Japanese'
 
+  email:
+    subject:
+      event_cancelled: "OpenLesson: An event was cancelled"
+      congratulate_on_becoming_instructor: "OpenLesson: Congratulations on becoming an instructor"
+      payout_received: "OpenLesson: You received a new payout"
+
   redirected: "You will now be redirected to %{link}"
 
   confirmations:

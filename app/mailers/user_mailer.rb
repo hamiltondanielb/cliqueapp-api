@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
     @user = event_registration.user
 
     prepare_variables
-    mail(to: @user.email, subject: "OpenLesson: An event was cancelled")
+    mail(to: @user.email, subject: I18n.t('email.subject.event_cancelled'))
   end
 
   def congratulate_on_becoming_instructor user
@@ -15,7 +15,7 @@ class UserMailer < ApplicationMailer
     @user = user
 
     prepare_variables
-    mail(to: @user.email, subject: "OpenLesson: Congratulations on becoming an instructor")
+    mail(to: @user.email, subject: I18n.t('email.subject.congratulate_on_becoming_instructor'))
   end
 
   def inform_of_payout event
@@ -23,7 +23,7 @@ class UserMailer < ApplicationMailer
     @event = event
 
     prepare_variables
-    mail(to: @user.email, subject: "OpenLesson: You received a new payout")
+    mail(to: @user.email, subject: I18n.t('email.subject.payout_received'))
   end
 
   private
