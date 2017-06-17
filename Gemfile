@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'premailer-rails'
+gem 'nokogiri'
 gem 'haml-rails'
 gem 'newrelic_rpm'
 gem 'factory_girl_rails', groups: [:development, :test]

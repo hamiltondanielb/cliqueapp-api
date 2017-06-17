@@ -6,7 +6,6 @@ class UserMailer < ApplicationMailer
     @event_registration = event_registration
     @user = event_registration.user
 
-    prepare_variables
     mail(to: @user.email, subject: I18n.t('email.subject.event_cancelled'))
   end
 
@@ -14,7 +13,6 @@ class UserMailer < ApplicationMailer
 
     @user = user
 
-    prepare_variables
     mail(to: @user.email, subject: I18n.t('email.subject.congratulate_on_becoming_instructor'))
   end
 
@@ -22,12 +20,7 @@ class UserMailer < ApplicationMailer
     @user = event.post.user
     @event = event
 
-    prepare_variables
     mail(to: @user.email, subject: I18n.t('email.subject.payout_received'))
   end
 
-  private
-  def prepare_variables
-    @logo_data_uri = asset_data_uri 'logo.png'
-  end
 end
