@@ -9,7 +9,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert event.reload.cancelled?
   end
 
-  test "lists days with activity for seven weeks from date" do
+  test "lists days with events for seven weeks from date" do
     user = create :user
     create :event, post: create(:post, user:user), start_time: 15.weeks.ago
     create :event, post: create(:post, user:user), start_time: 14.weeks.ago
@@ -21,7 +21,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     create :event, post: create(:post, user:user), start_time: 8.weeks.ago
     create :event, post: create(:post, user:user), start_time: 7.weeks.ago
 
-    get days_with_activity_path, params: {user_id: user.id, seven_weeks_from: (14.weeks.ago - 1.day).iso8601}
+    get days_with_events_path, params: {user_id: user.id, seven_weeks_from: (14.weeks.ago - 1.day).iso8601}
 
     assert_equal 200, response.status, response.status
     assert_equal 7, JSON.parse(response.body)['days'].length, response.body
