@@ -8,6 +8,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     PaymentProcessorMock.unmock
   end
 
+  test "it prevents a normal user from retrieving a private user" do
+    user = create :user, private:true
+
+    get user_path(user)
+
+    assert_equal 404, response.status
+
+    user.update! private:false
+
+    get user_path(user)
+
+    assert_equal 200, response.status
+  end
+
+  test "it allows a current user to see their profile even if private" do
+    user = create :user, private:true
+
+    get user_path(user), headers: authorization_header_for(user)
+
+    assert_equal 200, response.status
+  end
+
   test "it handles errors when updating a user" do
     user = create :user, profile_picture:nil
 

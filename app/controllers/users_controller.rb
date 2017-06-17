@@ -2,7 +2,17 @@ class UsersController < ApplicationController
   before_action :authorize_user!, except: [:show]
 
   def show
-    render json: User.find(params[:id])
+    if current_user.present? && params[:id] == current_user.id.to_s
+      return render json: current_user
+    end
+
+    user = User.where(private:false).find_by(id: params[:id])
+
+    if user.nil?
+      render json: {errors: {global: "Could not find this user"}}, status: 404
+    else
+      render json: user
+    end
   end
 
   def update
@@ -20,7 +30,7 @@ class UsersController < ApplicationController
        current_user.update! stripe_account_id: PaymentProcessor.new.get_account_id(authorization_code)
        UserMailer.congratulate_on_becoming_instructor(current_user).deliver_now
      rescue Exception => e
-       return render json: {errors: {"global": e.message}}
+       return render json: {errors: {global: e.message}}
      end
 
      head :no_content
