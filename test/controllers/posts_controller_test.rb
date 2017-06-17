@@ -72,14 +72,15 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 123.1, Post.last.event.location.lng
   end
 
-  test "serves feed from follows" do
+  test "serves every post" do
     post = create :post
-    user2 = create :user
-    user2.follows.create! followed: post.user
 
-    get posts_path, headers: authorization_header_for(user2)
+    get posts_path
 
-    assert_equal [post.id], JSON.parse(response.body)['posts'].map{|h|h["id"]}
+    json = JSON.parse(response.body)
+    assert_equal [post.id], json['posts'].map{|h|h["id"]}
+    assert_equal 1, json["page"]
+    assert_equal 1, json["total"]
   end
 
   test "serves user feed" do
