@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   include Searchable
-  search_scope :search, against: [:name, :bio]
+  search_scope :user_search, against: [:name, :bio]
 
   include S3Credentials
   include Devise::JWT::RevocationStrategies::JTIMatcher
@@ -27,6 +27,10 @@ class User < ApplicationRecord
   has_many :likes
   has_many :event_registrations
   has_many :events, through: :event_registrations
+
+  def self.search *args
+    User.where(private:false).user_search(*args)
+  end
 
   def active_events
     Event.joins(:event_registrations).where('event_registrations.cancelled_at':nil).where('event_registrations.user_id': self.id)

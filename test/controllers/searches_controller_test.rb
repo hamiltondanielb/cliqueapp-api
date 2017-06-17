@@ -5,6 +5,38 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     ActiveRecord::Base.connection.execute("create extension if not exists pg_trgm;") if using_postgresql?
   end
 
+  test "it does not find posts from private users" do
+    skip(reason) if !using_postgresql?
+
+    user1 = create :user, private:true
+    post1 = create :post, user:user1, description: "hello"
+    post1.event = create :event, post:post1
+    user2 = create :user, private:false
+    post2 = create :post, user:user2, description: "hello"
+    post2.event = create :event, post:post2
+
+    get event_search_path, params: {term: "hello"}
+
+    assert response.body.include?("hello")
+    json = JSON.parse(response.body)
+    assert_equal 1, json["posts"].length
+    assert_equal post2.id, json["posts"][0]["id"]
+  end
+
+  test "it does not find private users" do
+    skip(reason) if !using_postgresql?
+
+    create :user, private:true, bio: "hello"
+    user2 = create :user, private:false, bio: "hello"
+
+    get user_search_path, params: {term: "hello"}
+
+    assert response.body.include?("hello")
+    json = JSON.parse(response.body)
+    assert_equal 1, json["users"].length
+    assert_equal user2.id, json["users"][0]["id"]
+  end
+
   test "gives random search results on sqlite" do
     skip("Skipping this test as we are not running SQLite") if using_postgresql?
 
