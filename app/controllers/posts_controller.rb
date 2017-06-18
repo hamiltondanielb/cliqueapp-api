@@ -7,12 +7,12 @@ class PostsController < ApplicationController
       render json: {posts: ActiveModelSerializers::SerializableResource.new(posts)}
     else
       page = params[:page] || 1
-      search = Post.order('created_at DESC')
+      posts = Post.public.order('created_at DESC')
 
       render json: {
         page: page,
-        total: search.count,
-        posts: ActiveModelSerializers::SerializableResource.new(search.page(page).per(20))
+        total: posts.count,
+        posts: ActiveModelSerializers::SerializableResource.new(posts.page(page).per(20))
       }
     end
   end

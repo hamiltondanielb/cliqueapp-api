@@ -23,9 +23,12 @@ class Post < ApplicationRecord
   validates_attachment_content_type :media, content_type: [/\Aimage\/.*\z/]
 
   def self.search *args
-    Post.joins(:event).where.not(events_posts: {post_id: nil})
-      .joins(:user).where(users: {private: false})
+    public.joins(:event).where.not(events_posts: {post_id: nil})
       .post_search(*args)
+  end
+
+  def self.public
+    Post.joins(:user).where(users: {private: false})
   end
 
   def is_image?
