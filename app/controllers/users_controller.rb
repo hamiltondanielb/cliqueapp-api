@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authorize_user!, except: [:show]
+  before_action :authorize!, except: [:show]
 
   def show
     if current_user.present? && params[:id] == current_user.id.to_s

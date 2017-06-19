@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authorize_user!, except: [:index, :show]
+  before_action :authorize!, except: [:index, :show]
 
   def index
     if params.include? :user_id

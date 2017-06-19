@@ -1,5 +1,5 @@
 class FollowsController < ApplicationController
-  before_action :authorize_user!, except: [:followers, :following]
+  before_action :authorize!, except: [:followers, :following]
 
   def followers
     render json: {users: ActiveModelSerializers::SerializableResource.new(User.find(params[:user_id]).follower_users)}

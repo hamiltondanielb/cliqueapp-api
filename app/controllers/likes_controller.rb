@@ -1,5 +1,5 @@
 class LikesController < ApplicationController
-  before_action :authorize_user!
+  before_action :authorize!
 
   def create
     current_user.likes.find_or_create_by! like_params

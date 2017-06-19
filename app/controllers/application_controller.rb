@@ -21,9 +21,11 @@ class ApplicationController < ActionController::Base
     headers['Content-Language'] = I18n.locale unless headers['Content-Language']
   end
 
-  def authorize_user!
+  def authorize!
     if !signed_in?
-      render json: {error: 'You need to be signed in to access this resource'}, status: 403
+      render json: {errors: {global: 'You need to be signed in to access this resource'}}, status: 403
+    elsif !current_user.confirmed?
+      render json: {errors: {global: 'You need to confirm your account before performing this action'}}, status: 401
     end
   end
 

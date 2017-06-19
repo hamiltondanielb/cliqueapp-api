@@ -1,5 +1,5 @@
 class EventRegistrationsController < ApplicationController
-  before_action :authorize_user!
+  before_action :authorize!
 
   def index
     return render(json: {errors: {global: 'Please specify a date'}}, status:400) if params[:date].blank?
