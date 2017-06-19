@@ -5,6 +5,25 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     ActiveRecord::Base.connection.execute("create extension if not exists pg_trgm;") if using_postgresql?
   end
 
+  test "it finds events using Japanese" do
+    skip(reason) if !using_postgresql?
+
+    event = create :event
+    event.post.update! description: "晴天の中"
+
+    event2 = create :event
+    event2.post.update! description: "Alex"
+
+    get event_search_path, params: {term: "の中"}
+
+    assert_equal 200, response.status
+    assert response.body.include?("晴天の中")
+    refute response.body.include?("Alex")
+
+    json = JSON.parse(response.body)
+    assert_equal 1, json["posts"].length
+  end
+
   test "it does not find posts from private users" do
     skip(reason) if !using_postgresql?
 
