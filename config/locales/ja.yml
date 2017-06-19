@@ -4,11 +4,11 @@ ja:
 
   email:
     subject:
-      event_cancelled: "OpenLesson: An event was cancelled"
-      congratulate_on_becoming_instructor: "OpenLesson: Congratulations on becoming an instructor"
-      payout_received: "OpenLesson: You received a new payout"
+      event_cancelled: "openlesson: イベントのキャンセルのお知らせ"
+      congratulate_on_becoming_instructor: "openlesson:　インストラクター認定、おめでとうございます！"
+      payout_received: "openlesson: 新規振込完了のお知らせ"
 
-  redirected: "You will now be redirected to %{link}"
+  redirected: "こちらの%{link}にリダイレクトされます。"
 
   confirmations:
     email_address: "メールアドレス"
