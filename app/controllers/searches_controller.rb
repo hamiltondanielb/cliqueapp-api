@@ -2,12 +2,12 @@ class SearchesController < ApplicationController
   include ActiveSupport::Inflector
 
   def user_search
-    return render(json: build_random_response(User)) if !using_postgresql?
+    return render(json: build_random_response('users', User.limit(20).all)) if !using_postgresql?
     render json: perform_search(User)
   end
 
   def event_search
-    return render(json: build_random_response(Post)) if !using_postgresql?
+    return render(json: build_random_response('posts', Event.limit(20).all.map(&:post))) if !using_postgresql?
     render json: perform_search(Post)
   end
 
@@ -21,9 +21,7 @@ class SearchesController < ApplicationController
     response
   end
 
-  def build_random_response model
-    results = model.all.sample(20)
-
+  def build_random_response name, results
     response = {
       errors: {
         global: "Could not execute a real full-text search since we are not running on PostgreSQL. The results in this response are random."
@@ -32,7 +30,7 @@ class SearchesController < ApplicationController
       total: results.count
     }
 
-    response[pluralize(model.name.downcase)] = ActiveModelSerializers::SerializableResource.new(results)
+    response[name] = ActiveModelSerializers::SerializableResource.new(results)
     response
   end
 end

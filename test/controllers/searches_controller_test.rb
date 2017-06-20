@@ -59,7 +59,8 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
   test "gives random search results on sqlite" do
     skip("Skipping this test as we are not running SQLite") if using_postgresql?
 
-    create :post, description: "Nicole"
+    event = create :event
+    event.post.update! description: "Nicole"
 
     get event_search_path, params: {term: "icol"}
 
