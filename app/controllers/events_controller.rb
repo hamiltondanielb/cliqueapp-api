@@ -42,7 +42,7 @@ class EventsController < ApplicationController
   def days_with_following_events
     return render(json: {errors: {global: 'Please specify a start date'}}, status:400) if params[:seven_weeks_from].blank?
 
-    days = retrieve_days_for(Event.joins(:post).where('user_id in (?)', current_user.follows.map(&:id)), params[:seven_weeks_from])
+    days = retrieve_days_for(Event.joins(:post).where('user_id in (?)', current_user.follows.map(&:followed_id)), params[:seven_weeks_from])
 
     render json: {days: days}
   end
