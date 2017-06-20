@@ -27,6 +27,12 @@ class Post < ApplicationRecord
       .post_search(*args)
   end
 
+  def self.with_event_on range_start
+    range_end = range_start + 24.hours
+    
+    Post.joins(:event).includes(:event).where('events.start_time >= ? and events.start_time <= ?', range_start, range_end)
+  end
+
   def self.public
     Post.joins(:user).where(users: {private: false})
   end

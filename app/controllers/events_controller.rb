@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_action :authorize!, except: [:index, :days_with_events]
 
   def destroy
     event = Event.find params[:id]
@@ -14,8 +15,16 @@ class EventsController < ApplicationController
     return render(json: {errors: {global: 'Please specify a user'}}, status:400) if user.blank?
 
     range_start = Time.parse(params[:date])
-    range_end = range_start + 24.hours
-    posts = Post.joins(:event).includes(:event).where('posts.user_id = ?', user.id).where('events.start_time >= ? and events.start_time <= ?', range_start, range_end)
+    posts = Post.with_event_on(range_start).where('posts.user_id = ?', user.id)
+
+    render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
+  end
+
+  def following_events
+    return render(json: {errors: {global: 'Please specify a date'}}, status:400) if params[:date].blank?
+
+    range_start = Time.parse(params[:date])
+    posts = Post.with_event_on(range_start).where('posts.user_id in (?)', current_user.follows.map(&:followed_id))
 
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
@@ -25,11 +34,23 @@ class EventsController < ApplicationController
     user = params[:user_id].present?? User.find(params[:user_id]) : current_user
     return render(json: {errors: {global: 'Please specify a user'}}, status:400) if user.blank?
 
-    days = user.organized_events.
-      where('start_time >= ?', params[:seven_weeks_from]).
-      where('start_time <= ?', Time.parse(params[:seven_weeks_from]) + 7.weeks).
-      pluck(:start_time)
+    days = retrieve_days_for(user.organized_events, params[:seven_weeks_from])
 
     render json: {days: days}
+  end
+
+  def days_with_following_events
+    return render(json: {errors: {global: 'Please specify a start date'}}, status:400) if params[:seven_weeks_from].blank?
+
+    days = retrieve_days_for(Event.joins(:post).where('user_id in (?)', current_user.follows.map(&:id)), params[:seven_weeks_from])
+
+    render json: {days: days}
+  end
+
+  private
+  def retrieve_days_for events, seven_weeks_from
+    events.where('start_time >= ?', seven_weeks_from).
+      where('start_time <= ?', Time.parse(seven_weeks_from) + 7.weeks).
+      pluck(:start_time)
   end
 end
