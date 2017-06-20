@@ -14,7 +14,7 @@ class EventsController < ApplicationController
     user = params[:user_id].present?? User.find(params[:user_id]) : current_user
     return render(json: {errors: {global: 'Please specify a user'}}, status:400) if user.blank?
 
-    range_start = Time.parse(params[:date])
+    range_start = Time.parse(params[:date]) - 1.minute
     posts = Post.with_event_on(range_start).where('posts.user_id = ?', user.id)
 
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
@@ -34,7 +34,7 @@ class EventsController < ApplicationController
     user = params[:user_id].present?? User.find(params[:user_id]) : current_user
     return render(json: {errors: {global: 'Please specify a user'}}, status:400) if user.blank?
 
-    days = retrieve_days_for(user.organized_events, params[:seven_weeks_from])
+    days = user.organized_events.within_seven_weeks_from(Time.parse(params[:seven_weeks_from]))
 
     render json: {days: days}
   end
@@ -42,15 +42,10 @@ class EventsController < ApplicationController
   def days_with_following_events
     return render(json: {errors: {global: 'Please specify a start date'}}, status:400) if params[:seven_weeks_from].blank?
 
-    days = retrieve_days_for(Event.joins(:post).where('user_id in (?)', current_user.follows.map(&:followed_id)), params[:seven_weeks_from])
+    days = Event.joins(:post).where('user_id in (?)', current_user.follows.map(&:followed_id)).
+      within_seven_weeks_from(Time.parse(params[:seven_weeks_from])).
+      pluck(:start_time)
 
     render json: {days: days}
-  end
-
-  private
-  def retrieve_days_for events, seven_weeks_from
-    events.where('start_time >= ?', seven_weeks_from).
-      where('start_time <= ?', Time.parse(seven_weeks_from) + 7.weeks).
-      pluck(:start_time)
   end
 end

@@ -4,10 +4,8 @@ class EventRegistrationsController < ApplicationController
   def index
     return render(json: {errors: {global: 'Please specify a date'}}, status:400) if params[:date].blank?
 
-    range_start = Time.parse(params[:date])
-    range_end = range_start + 24.hours
-
-    events = current_user.active_events.where('start_time >= ? and start_time <= ?', range_start, range_end).order('start_time DESC')
+    range_start = Time.parse(params[:date]) - 1.minute
+    events = current_user.active_events.within_24_hours_of(range_start).order('start_time DESC')
 
     render json: {posts: ActiveModelSerializers::SerializableResource.new(events.map(&:post))}
   end
@@ -15,10 +13,7 @@ class EventRegistrationsController < ApplicationController
   def days_with_event_registrations
     return render(json: {errors: {global: 'Please specify a start date'}}, status:400) if params[:seven_weeks_from].blank?
 
-    days = current_user.active_events.
-      where('start_time >= ?', params[:seven_weeks_from]).
-      where('start_time <= ?', Time.parse(params[:seven_weeks_from]) + 7.weeks).
-      pluck(:start_time)
+    days = current_user.active_events.within_seven_weeks_from(Time.parse(params[:seven_weeks_from])).pluck(:start_time)
 
     render json: {days: days}
   end

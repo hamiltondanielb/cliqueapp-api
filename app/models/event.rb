@@ -11,6 +11,18 @@ class Event < ApplicationRecord
 
   scope :active, -> {where(cancelled_at:nil)}
 
+  def self.within_24_hours_of range_start
+    range_end = range_start + 24.hours
+
+    where('start_time >= ?', range_start).where('start_time <= ?', range_end)
+  end
+
+  def self.within_seven_weeks_from range_start
+    range_end = range_start + 7.weeks
+
+    where('start_time >= ?', range_start).where('start_time <= ?', range_end)
+  end
+
   def self.perform_payouts! currency:"JPY"
     errors = []
 
