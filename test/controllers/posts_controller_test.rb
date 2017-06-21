@@ -25,6 +25,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     patch post_path(event.post), params: {post: {event: {
       start_time: "2017-05-25T16:43:50.206Z",
       end_time: "2017-05-25T17:53:50.206Z",
+      cards_accepted: true,
       location: {
         label: 'Studio',
         address: '1 Shibuya',
@@ -42,6 +43,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal '1 Shibuya', event.location.address
     assert_equal 33.1, event.location.lat
     assert_equal 123.1, event.location.lng
+    assert event.cards_accepted?
   end
 
   test "creates a post attached to an event" do
