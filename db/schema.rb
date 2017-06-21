@@ -97,15 +97,6 @@ ActiveRecord::Schema.define(version: 20170621102837) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "registrations", force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_registrations_on_event_id"
-    t.index ["user_id"], name: "index_registrations_on_user_id"
-  end
-
   create_table "taggings", force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"

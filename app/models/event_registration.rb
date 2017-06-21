@@ -54,6 +54,10 @@ class EventRegistration < ApplicationRecord
     !event.free? && !incurred_charge?
   end
 
+  def paid_with_card?
+    incurred_charge?
+  end
+
   def refunded?
     refunded_at.present?
   end
