@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170621101448) do
+ActiveRecord::Schema.define(version: 20170621102837) do
 
   create_table "event_registrations", force: :cascade do |t|
     t.integer "user_id"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170621101448) do
     t.decimal "payout_sum", precision: 8, scale: 2
     t.string "payout_currency"
     t.boolean "cards_accepted", default: false
+    t.integer "max_participants"
     t.index ["post_id"], name: "index_events_on_post_id"
   end
 
