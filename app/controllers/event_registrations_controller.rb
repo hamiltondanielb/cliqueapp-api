@@ -33,7 +33,7 @@ class EventRegistrationsController < ApplicationController
       end
     end
 
-    current_user.event_registrations.create! event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount
+    current_user.event_registrations.create! event_registration_params.merge(event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount)
 
     head :no_content
   end
@@ -60,6 +60,11 @@ class EventRegistrationsController < ApplicationController
     event_registration.update! refunded_at: Time.now, cancelled_at: Time.now, refund_id: refund.id
 
     head :no_content
+  end
+
+  protected
+  def event_registration_params
+    params.require(:event_registration).permit(:agreed_to_policy)
   end
 
 end

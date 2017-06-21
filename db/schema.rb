@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617093518) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-  enable_extension "pg_trgm"
+ActiveRecord::Schema.define(version: 20170621100239) do
 
   create_table "event_registrations", force: :cascade do |t|
     t.integer "user_id"
@@ -27,6 +23,7 @@ ActiveRecord::Schema.define(version: 20170617093518) do
     t.datetime "refunded_at"
     t.string "refund_id"
     t.datetime "cancellation_notified_at"
+    t.boolean "agreed_to_policy", default: false
     t.index ["event_id"], name: "index_event_registrations_on_event_id"
     t.index ["user_id"], name: "index_event_registrations_on_user_id"
   end

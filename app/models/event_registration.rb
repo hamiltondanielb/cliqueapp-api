@@ -1,6 +1,7 @@
 class EventRegistration < ApplicationRecord
   belongs_to :user
   belongs_to :event
+  validates :agreed_to_policy, inclusion: {in: [true]}
 
   scope :active, -> {where(cancelled_at:nil)}
 
