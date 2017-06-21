@@ -50,6 +50,10 @@ class EventRegistration < ApplicationRecord
     charge_id.present?
   end
 
+  def paying_cash?
+    !event.free? && !incurred_charge?
+  end
+
   def refunded?
     refunded_at.present?
   end

@@ -83,16 +83,30 @@ class EventRegistrationsControllerTest < ActionDispatch::IntegrationTest
 
     post event_event_registrations_path(event), params: {event_registration: {agreed_to_policy:true}, stripe_info: {email: user.email, id: "tok_test"}}, headers: authorization_header_for(user)
 
-    assert_equal 200, response.status, "#{response.status}: #{response.body}"
+    assert_equal 502, response.status, "#{response.status}: #{response.body}"
     assert_json_contains_errors response.body, "global"
     assert_equal 0, user.reload.events.count
   end
 
+  test "creates an event registration where user pays cash" do
+    user = create :user
+    event = create :event, price: 100
+
+    post event_event_registrations_path(event), params: {event_registration: {agreed_to_policy:true}}, headers: authorization_header_for(user)
+
+    assert_equal 204, response.status, "#{response.status}: #{response.body}"
+    user.reload
+    assert_equal 1, user.events.count
+    assert_equal 1, user.event_registrations.count
+    assert user.event_registrations.first.agreed_to_policy
+    assert user.event_registrations.first.paying_cash?
+  end
+
   test "creates an event registration for a free event" do
     user = create :user
-    event = create :event
+    event = create :event, price:nil
 
-    post event_event_registrations_path(event), params: {event_registration: {agreed_to_policy:true}, stripe_info: {email: user.email, id: "tok_ca"}}, headers: authorization_header_for(user)
+    post event_event_registrations_path(event), params: {event_registration: {agreed_to_policy:true}}, headers: authorization_header_for(user)
 
     assert_equal 204, response.status, "#{response.status}: #{response.body}"
     user.reload

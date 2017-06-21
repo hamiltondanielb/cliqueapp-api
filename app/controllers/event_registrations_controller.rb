@@ -22,18 +22,19 @@ class EventRegistrationsController < ApplicationController
     event = Event.find params[:event_id]
     charge = OpenStruct.new id:nil, amount:nil
 
-    if !event.free?
+    if !event.free? && !pay_cash?
       begin
         processor = PaymentProcessor.new
         current_user.update! stripe_customer_id: processor.create_customer(params[:stripe_info][:email], params[:stripe_info][:id]).id
         charge = processor.charge event.price.to_i, current_user.stripe_customer_id
       rescue Exception => e
         Rails.logger.warn "Could not charge user: #{e}"
-        return render json: {errors: {global: "We could not process the payment: #{e}"}}
+        return render json: {errors: {global: "We could not process the payment: #{e}"}}, status: 502
       end
+      current_user.event_registrations.create! event_registration_params.merge(event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount)
+    else
+      current_user.event_registrations.create! event_registration_params.merge(event_id: params[:event_id])
     end
-
-    current_user.event_registrations.create! event_registration_params.merge(event_id: params[:event_id], charge_id: charge.id, amount_paid: charge.amount)
 
     head :no_content
   end
@@ -65,6 +66,10 @@ class EventRegistrationsController < ApplicationController
   protected
   def event_registration_params
     params.require(:event_registration).permit(:agreed_to_policy)
+  end
+
+  def pay_cash?
+    params[:stripe_info].blank?
   end
 
 end
