@@ -24,8 +24,8 @@ class User < ApplicationRecord
   has_many :followers, dependent: :destroy, class_name: 'Follow', foreign_key: :followed_id
   has_many :following_users, through: :follows, source: :followed
   has_many :follower_users, through: :followers, source: :follower
-  has_many :likes
-  has_many :event_registrations
+  has_many :likes, dependent: :destroy
+  has_many :event_registrations, dependent: :destroy
   has_many :events, through: :event_registrations
 
   def self.search *args
