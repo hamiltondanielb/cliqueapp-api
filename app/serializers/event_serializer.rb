@@ -6,7 +6,7 @@ class EventSerializer < ActiveModel::Serializer
   end
 
   def event_registrations
-    ActiveModelSerializers::SerializableResource.new object.event_registrations
+    ActiveModelSerializers::SerializableResource.new object.active_event_registrations
   end
 
   def cancelled
