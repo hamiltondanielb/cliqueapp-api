@@ -13,14 +13,12 @@ class ConfirmationsController < Devise::ConfirmationsController
   end
 
   def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    User.send_confirmation_instructions({email: current_user.email})
 
-    if successfully_sent?(resource)
-      flash.now[:notice] = I18n.t 'devise.confirmations.send_instructions'
-      render 'message'
+    if successfully_sent?(current_user)
+      head :no_content
     else
-      flash.now[:alert] = I18n.t 'confirmations.sending_error'
-      render 'confirmation_error'
+      render json: {errors: {global: I18n.t('confirmations.sending_error')}}
     end
   end
 
