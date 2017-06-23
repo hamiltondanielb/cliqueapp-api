@@ -1,5 +1,5 @@
 class PaymentProcessor
-  APPLICATION_FEE = 3.6
+  APPLICATION_FEE = 5.0
 
   raise "Please specify the STRIPE_KEY as an environment variable" unless ENV['STRIPE_KEY']
   raise "Please specify the STRIPE_CLIENT_ID as an environment variable" unless ENV['STRIPE_CLIENT_ID']

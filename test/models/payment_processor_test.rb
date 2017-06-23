@@ -45,7 +45,7 @@ class PaymentProcessorTest < ActiveSupport::TestCase
     payout = processor.pay_out 1000, "acct_1APr3BLdGggRtZJo", currency:"EUR"
 
     assert payout, "there should have been a payout"
-    assert_equal 964, payout["amount"]
+    assert_equal 950, payout["amount"]
   end
 
   test "it retrieves account id" do

@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  DAYS_BETWEEN_EVENT_AND_PAYOUT = 2
+  DAYS_BETWEEN_EVENT_AND_PAYOUT = 1
 
   belongs_to :post
   has_one :location, dependent: :destroy, autosave:true
