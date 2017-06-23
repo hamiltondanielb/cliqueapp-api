@@ -78,7 +78,7 @@ class PostsController < ApplicationController
   end
 
   def event_params
-    params.require(:post).require(:event).permit(:start_time, :end_time, :women_only, :difficulty_level, :price, :cards_accepted, :max_participants)
+    params.require(:post).require(:event).permit(:start_time, :end_time, :women_only, :difficulty_level, :price, :cards_accepted, :max_participants, :email)
   end
 
   def location_params
