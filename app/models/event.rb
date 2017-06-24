@@ -56,7 +56,7 @@ class Event < ApplicationRecord
   end
 
   def total_paid
-    active_event_registrations.map(&:amount_paid).sum
+    active_event_registrations.map(&:amount_paid).compact.sum
   end
 
   def guest_count

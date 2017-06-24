@@ -32,6 +32,7 @@ class EventTest < ActiveSupport::TestCase
 
     create :event_registration, event:event, amount_paid:50
     create :event_registration, event:event, amount_paid:100
+    create :event_registration, event:event, amount_paid:nil
 
     assert_equal 150, event.total_paid
   end
