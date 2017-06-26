@@ -14,7 +14,8 @@ class Post < ApplicationRecord
   before_destroy :ensure_no_event_before_destroying
 
   has_attached_file :media,
-    styles: { medium: "300x300>", thumb: "100x100>" },
+    styles: { large: "1600x1600>", medium: "360x360>", thumb: "180x180>" },
+    source_file_options: { all: '-auto-orient' },
     processors: [ :thumbnail ],
     storage: (Rails.env.production?? :s3 : :filesystem),
     s3_credentials: Proc.new {|a| a.instance.s3_credentials},
@@ -29,7 +30,7 @@ class Post < ApplicationRecord
 
   def self.with_event_on range_start
     range_end = range_start + 24.hours
-    
+
     Post.joins(:event).includes(:event).where('events.start_time >= ? and events.start_time <= ?', range_start, range_end)
   end
 

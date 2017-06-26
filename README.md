@@ -56,6 +56,8 @@ To run tests, just run:
 
 # Deploy
 
+## Staging
+
 To deploy the app, make sure you created a Heroku remote pointing to the environment you want to deploy to.
 
 You will need to install the [Heroku toolbelt](https://devcenter.heroku.com/articles/heroku-cli).
@@ -67,6 +69,15 @@ Here's an example of creating a `staging` remote:
 Once that's done, you can push to staging like so:
 
     git push staging
+
+## Production
+
+1. `heroku create --remote production open-lesson-api`
+2. `heroku maintenance:on --remote production`
+3. `git push production`
+4. `heroku run rails db:migrate`
+5. `heroku addons:open scheduler` if there are new background tasks
+6. `heroku maintenance:off --remote production`
 
 # FAQ
 
