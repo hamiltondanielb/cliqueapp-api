@@ -2,6 +2,12 @@ require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
 
+  test "generates a unique transfer group id for that event" do
+    event = create :event
+
+    assert_equal "EVENT-#{event.id}", event.transfer_group_id
+  end
+
   test "performs payouts" do
     event = create :event, price:100, start_time: 3.days.ago
     event.post.user.update! stripe_account_id: "acct_1APr3BLdGggRtZJo"

@@ -14,12 +14,13 @@ class PaymentProcessor
     end
   end
 
-  def charge amount, customer_id, currency:"JPY"
+  def charge amount, customer_id, transfer_group_id, currency:"JPY"
     begin
       return Stripe::Charge.create({
         :amount => amount,
         :currency => currency,
-        :customer => customer_id
+        :customer => customer_id,
+        :transfer_group => transfer_group_id
       })
     rescue Stripe::CardError => e
       Rails.logger.warn("There was a problem processing a payment: #{e.message}")
@@ -27,12 +28,13 @@ class PaymentProcessor
     end
   end
 
-  def pay_out amount, account_id, currency:"JPY"
+  def pay_out amount, account_id, transfer_group_id, currency:"JPY"
     begin
       return Stripe::Transfer.create({
         :amount => (amount*(1-APPLICATION_FEE/100)).to_i,
         :currency => currency,
-        :destination => account_id
+        :destination => account_id,
+        :transfer_group => transfer_group_id
       })
     rescue Exception => e
       Rails.logger.warn("There was a problem issuing a payout: #{e}")

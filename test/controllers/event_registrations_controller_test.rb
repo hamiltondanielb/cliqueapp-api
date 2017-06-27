@@ -21,7 +21,7 @@ class EventRegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "prevents cancelling an event registration if event is happening soon" do
-    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg"
+    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex 32}"
     user = create :user
     event = build :event, price: 100, start_time:6.hours.from_now
     event_registration = create :event_registration, user:user, event: event, charge_id: charge.id, amount_paid: event.price
@@ -37,7 +37,7 @@ class EventRegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "cancels event registration for paid event" do
-    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg"
+    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex 32}"
     user = create :user
     event = build :event, price: 100
     event_registration = create :event_registration, user:user, event: event, charge_id: charge.id, amount_paid: event.price
@@ -52,7 +52,7 @@ class EventRegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "handles errors from Stripe when cancelling an event" do
-    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg"
+    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex 32}"
     user = create :user
     event = build :event, price: 100
     event_registration = create :event_registration, user:user, event: event, charge_id: "test", amount_paid: event.price

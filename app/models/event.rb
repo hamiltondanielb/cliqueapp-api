@@ -11,6 +11,10 @@ class Event < ApplicationRecord
 
   scope :active, -> {where(cancelled_at:nil)}
 
+  def transfer_group_id
+    "EVENT-#{id}"
+  end
+  
   def self.within_24_hours_of range_start
     range_end = range_start + 24.hours
 
@@ -51,7 +55,7 @@ class Event < ApplicationRecord
   end
 
   def pay_out! currency:"JPY"
-    payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, currency:currency
+    payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, transfer_group_id, currency:currency
     self.update! paid_out_at: Time.now, payout_id: payout.id, payout_sum: payout.amount, payout_currency: payout.currency
   end
 

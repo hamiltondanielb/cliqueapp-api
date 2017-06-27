@@ -11,12 +11,12 @@ class ConfirmationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "user asks to resend instructions" do
-    new_user = User.create! email: 'tobeconfirmed@example.org', name: 'tester', password:'12345678'
-    old_time = new_user.confirmation_sent_at
+    new_user = User.create! email: 'tobeconfirmed@example.org', name: 'tester', password:'12345678', confirmation_sent_at:nil
+    
     post user_confirmation_path, headers: authorization_header_for(new_user)
 
     assert response.successful?, "body was #{response.body}"
-    assert new_user.reload.confirmation_sent_at != old_time, "confirmation_sent_at should have been updated"
+    assert new_user.reload.confirmation_sent_at, "confirmation_sent_at should have been set"
   end
 
 end

@@ -28,12 +28,12 @@ class PaymentProcessorTest < ActiveSupport::TestCase
   test "it charges a customer" do
     processor = PaymentProcessor.new
 
-    assert processor.charge 1000, "cus_AlqetMhwaNl8lg"
+    assert processor.charge 1000, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex(32)}"
   end
 
   test "it refunds a charge" do
     processor = PaymentProcessor.new
-    charge = processor.charge 1000, "cus_AlqetMhwaNl8lg"
+    charge = processor.charge 1000, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex 32}"
 
     assert processor.refund charge
   end
@@ -41,8 +41,9 @@ class PaymentProcessorTest < ActiveSupport::TestCase
   test "it performs a payout minus a 3.6% application fee" do
     processor = PaymentProcessor.new
 
-    processor.charge 1000, "cus_AlqetMhwaNl8lg"
-    payout = processor.pay_out 1000, "acct_1APr3BLdGggRtZJo", currency:"EUR"
+    transfer_group_id = "EVENT-#{SecureRandom.hex 32}"
+    processor.charge 1000, "cus_AlqetMhwaNl8lg", transfer_group_id
+    payout = processor.pay_out 1000, "acct_1APr3BLdGggRtZJo", transfer_group_id, currency:"EUR"
 
     assert payout, "there should have been a payout"
     assert_equal 950, payout["amount"]

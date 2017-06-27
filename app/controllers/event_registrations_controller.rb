@@ -26,7 +26,7 @@ class EventRegistrationsController < ApplicationController
       begin
         processor = PaymentProcessor.new
         current_user.update! stripe_customer_id: processor.create_customer(params[:stripe_info][:email], params[:stripe_info][:id]).id
-        charge = processor.charge event.price.to_i, current_user.stripe_customer_id
+        charge = processor.charge event.price.to_i, current_user.stripe_customer_id, event.transfer_group_id
       rescue Exception => e
         Rails.logger.warn "Could not charge user: #{e}"
         return render json: {errors: {global: "We could not process the payment: #{e}"}}, status: 502

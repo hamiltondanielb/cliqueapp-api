@@ -35,7 +35,7 @@ class EventRegistrationTest < ActiveSupport::TestCase
   test "performs refunds" do
     event = create :event, price:100, start_time: 3.days.ago, cancelled_at:2.days.ago
     event.post.user.update! stripe_account_id: "acct_1APr3BLdGggRtZJo"
-    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg"
+    charge = PaymentProcessor.new.charge 100, "cus_AlqetMhwaNl8lg", "EVENT-#{SecureRandom.hex 32}"
     event_registration = create :event_registration, event:event, amount_paid:100, charge_id:charge.id
 
     EventRegistration.perform_refunds!
