@@ -40,6 +40,7 @@ In order to get all the features, you will need a few environment variables. Sto
 ```
 DEVISE_JWT_SECRET_KEY=36fb2d3ad966bf8f75dddc1f4a1a5e6ed37ecdceea5461e0d9e2c25c80bc497aa9f576b2d0cc95e5a49e8ba7b67ccaa6c907e91610c56389969e30539659c696
 STRIPE_KEY=sk_test_SlTDoD7uUc3WUf2f94AphJGB
+STRIPE_CLIENT_ID=ca_AlM7YmS3eSwVhxaS0heVw942bspH7G9x
 APP_URL="http://localhost:3000"
 ```
 
