@@ -27,6 +27,29 @@ To process uploads, you will need Image Magick installed. You should run the fol
 
     brew install imagemagick
 
+
+## Search and PostgreSQL
+
+If you want to test search, you'll need to use a Postgres database.
+
+Install postgres and create a role for the app:
+
+    $ sudo su postgres
+    $ psql
+    > create role openlesson with createdb login encrypted password 'openlesson';
+    > exit
+
+Then run the following commands to create the database in Postgres:
+
+    USE_PG=yes rails db:create
+    USE_PG=yes rails db:schema:load
+
+Then you can use your Postgres database by always prefixing the rails server command with `USE_PG=yes`
+
+    USE_PG=yes rails s -p 4444
+
+You will have to create new users and new test data. (TIP: To log out forcefully in the browser, just type `localStorage.removeItem('user');localStorage.removeItem('jwt');` in the Dev Tools)
+
 # Run
 
 

@@ -1,7 +1,10 @@
 default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   adapter: <%= ENV["USE_PG"].present?? 'postgresql' : 'sqlite3' %>
+  username: <%= ENV["USE_PG"].present?? 'openlesson' : nil %>
+  password: <%= ENV["USE_PG"].present?? 'openlesson' : nil %>
   timeout: 5000
+  host: localhost
 
 development:
   <<: *default
