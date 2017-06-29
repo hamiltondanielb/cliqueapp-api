@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  acts_as_paranoid
+
   include Searchable
   search_scope :user_search, against: [:name, :bio]
 
@@ -19,7 +21,7 @@ class User < ApplicationRecord
 
   validates_attachment_content_type :profile_picture, content_type: /\Aimage\/.*\z/
 
-  has_many :posts, dependent: :destroy
+  has_many :posts
   has_many :follows, dependent: :destroy, class_name: 'Follow', foreign_key: :follower_id
   has_many :followers, dependent: :destroy, class_name: 'Follow', foreign_key: :followed_id
   has_many :following_users, through: :follows, source: :followed
@@ -27,9 +29,20 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :event_registrations, dependent: :destroy
   has_many :events, through: :event_registrations
+  before_destroy :destroy_non_event_posts!
 
   def self.search *args
     User.where(private:false).user_search(*args)
+  end
+
+  def destroy_non_event_posts!
+    non_event_posts = posts.select {|p| p.event.blank?}
+
+    ActiveRecord::Base.transaction do
+      non_event_posts.each {|p| p.destroy!}
+    end
+
+    non_event_posts
   end
 
   def active_events

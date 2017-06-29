@@ -8,6 +8,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     PaymentProcessorMock.unmock
   end
 
+  test "it deletes a user account" do
+    user = create :user
+    post = create :post, user:user
+    event = create :event, post: create(:post, user:user)
+    like = create :like, post:post
+    other = create :user
+    follow1 = create :follow, follower:user, followed: other
+    follow2 = create :follow, followed:user, follower: other
+
+    delete user_path(user), headers: authorization_header_for(user)
+
+    assert_equal 204, response.status
+    refute User.find_by(id:user.id)
+  end
+
   test "it prevents a normal user from retrieving a private user" do
     user = create :user, private:true
 

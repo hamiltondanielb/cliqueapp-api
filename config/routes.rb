@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  delete '/users', to: 'users#destroy'
+  
   devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
 
   match '*path', via: :options, to: 'application#options'
@@ -15,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'test_locale', to: 'application#test_locale'
 
-  resources :users, only: [:update, :show]
+  resources :users, only: [:update, :show, :destroy]
 
   post '/users/connect_stripe', to: 'users#connect_stripe', as: 'connect_stripe'
   post '/users/disconnect_stripe', to: 'users#disconnect_stripe', as: 'disconnect_stripe'

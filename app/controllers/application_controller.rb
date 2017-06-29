@@ -33,6 +33,14 @@ class ApplicationController < ActionController::Base
     { errors: model.errors.map {|k,v| [k, v]}.to_h }
   end
 
+  def current_user
+    begin
+      super
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+  end
+
   private
 
   def accept_locale(env)

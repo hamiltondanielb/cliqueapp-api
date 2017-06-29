@@ -1,6 +1,16 @@
 require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
+  test "does not include a post in public scope if user was deleted" do
+    event = create :event
+
+    assert_equal [event.post], Post.public
+
+    event.post.user.destroy!
+
+    assert_equal [], Post.public
+  end
+
   test "it does not delete a post if it is linked to an event" do
     post = create :post, event: create(:event)
 

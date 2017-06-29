@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   include Searchable
   include S3Credentials
 
-  belongs_to :user
+  belongs_to :user, -> { with_deleted }
   has_many :likes, dependent: :destroy
   has_one :event, dependent: :destroy, autosave:true
   has_one :location, through: :event

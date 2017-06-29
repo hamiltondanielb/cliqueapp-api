@@ -47,6 +47,15 @@ class UsersController < ApplicationController
      head :no_content
   end
 
+  def destroy
+    if current_user.destroy
+      current_user.destroy_non_event_posts!
+      head :no_content
+    else
+      return render json: {errors: {"global": current_user.errors.full_messages.join(' ')}}, status: 200
+    end
+  end
+
   private
 
   def user_params
