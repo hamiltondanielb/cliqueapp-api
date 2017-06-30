@@ -122,6 +122,6 @@ Once that's done, you can push to staging like so:
 #### How can I confirm a user in development?
 
 - Run `rails c` from the top-level
-- Then run `User.all.each {|u| s.skip_confirmation!; u;save!}` to confirm all users
+- Then run `User.all.each {|u| u.skip_confirmation!; u.save!}` to confirm all users
 
 If you want to confirm a specific user (e.g. user with id 1), just run: `User.find(1).tap {|u| u.skip_confirmation!; u.save!}`
