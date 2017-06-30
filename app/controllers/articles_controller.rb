@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   def create
     article = Article.new article_params
     article.user = current_user
+    article.published_at = Time.now unless params[:article][:draft]
 
     if article.save
       render json: article, status: 201
@@ -16,6 +17,10 @@ class ArticlesController < ApplicationController
     article = current_user.articles.find params[:id]
 
     article.assign_attributes article_params
+
+    if article.draft? && !params[:article][:draft]
+      article.published_at = Time.now
+    end
 
     if article.save
       render json: article

@@ -1,13 +1,43 @@
 require 'test_helper'
 
 class ArticlesControllerTest < ActionDispatch::IntegrationTest
+  test "it saves an article as draft" do
+    user = create :user
+
+    post articles_path, headers: authorization_header_for(user), params: {article: {title: "testitle", body: "testbody", draft:true}}
+
+    assert_equal(201,response.status)
+    assert user.reload.articles.last.draft?
+  end
+
+  test "it updates a draft" do
+    user = create :user
+    article = create :article, user:user, published_at:nil
+
+    put article_path(article), headers: authorization_header_for(user), params: {article: {title: "testitle", body: "testbody", draft:true}}
+
+    assert_equal 200, response.status, response.body
+    assert user.reload.articles.last.draft?
+  end
+
+  test "it publishes a draft" do
+    user = create :user
+    article = create :article, user:user, published_at:nil
+
+    put article_path(article), headers: authorization_header_for(user), params: {article: {title: "testitle", body: "testbody"}}
+
+    assert_equal 200, response.status
+    assert user.reload.articles.last.published?
+  end
+
   test "it creates an article" do
     user = create :user
 
     post articles_path, headers: authorization_header_for(user), params: {article: {title: "testitle", body: "testbody"}}
 
-    assert_equal(201,response.status)
-    assert_equal(1,user.reload.articles.length)
+    assert_equal 201, response.status
+    assert_equal 1, user.reload.articles.length
+    assert(user.reload.articles.last.published?)
   end
 
   test "it updates an article" do
