@@ -41,4 +41,6 @@ Rails.application.routes.draw do
 
   get '/search/users', to: 'searches#user_search', as: 'user_search'
   get '/search/events', to: 'searches#event_search', as: 'event_search'
+
+  resources :articles
 end

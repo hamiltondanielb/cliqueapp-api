@@ -8,10 +8,12 @@ class UserTest < ActiveSupport::TestCase
     location = create :location, event:event
     like = create :like, user:user, post:post
     event_registration = create :event_registration, event:event, user:user
+    article = create :article, user:user
 
     user.organized_events.destroy_all
     user.destroy!
 
+    refute Article.find_by(id:article.id)
     refute Post.find_by(id:post.id)
     refute Event.find_by(id:event.id)
     refute Location.find_by(id:location.id)
