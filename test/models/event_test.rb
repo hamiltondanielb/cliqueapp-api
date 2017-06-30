@@ -45,11 +45,14 @@ class EventTest < ActiveSupport::TestCase
 
   test "lists events to be paid out" do
     event = create :event, price:100, start_time: 3.days.ago
+    event.post.user.update! stripe_account_id: "testid"
     create :event, price:100, start_time: 3.days.ago, cancelled_at:1.day.ago
     create :event, price:100, start_time: 23.hours.ago
     create :event, price:100, start_time: 1.day.from_now
     create :event, price:0, start_time: 6.days.ago
     create :event, price:100, start_time: 6.days.ago, paid_out_at:4.days.ago
+    disconnected = create :event,price: 100, start_time: 3.days.ago
+    disconnected.post.user.update! stripe_account_id:nil
 
     assert_equal [event], Event.to_be_paid_out
   end

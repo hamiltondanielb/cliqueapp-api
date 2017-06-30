@@ -48,7 +48,9 @@ class Event < ApplicationRecord
   end
 
   def self.to_be_paid_out
-    Event.where(paid_out_at:nil)
+    Event.joins(:post).joins('inner join users on users.id=posts.user_id')
+      .where.not({users: {stripe_account_id: nil}})
+      .where(paid_out_at:nil)
       .where(cancelled_at:nil)
       .where('price is not null and price > 0')
       .where('start_time < ?', DAYS_BETWEEN_EVENT_AND_PAYOUT.days.ago)
