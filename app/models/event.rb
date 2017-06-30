@@ -14,7 +14,7 @@ class Event < ApplicationRecord
   def transfer_group_id
     "EVENT-#{id}"
   end
-  
+
   def self.within_24_hours_of range_start
     range_end = range_start + 24.hours
 
@@ -93,7 +93,7 @@ class Event < ApplicationRecord
 
   protected
   def only_instructors_can_create_events
-    if !post.user.instructor_terms_accepted?
+    if post.user.present? && !post.user.instructor_terms_accepted?
       self.errors.add :base, "You must become an instructor before creating events."
     end
   end

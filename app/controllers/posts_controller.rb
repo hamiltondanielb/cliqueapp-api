@@ -7,7 +7,7 @@ class PostsController < ApplicationController
       render json: {posts: ActiveModelSerializers::SerializableResource.new(posts)}
     else
       page = params[:page] || 1
-      posts = Post.public.order('created_at DESC')
+      posts = Post.public.with_active_event.order('created_at DESC')
 
       render json: {
         page: page,

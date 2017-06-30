@@ -1,6 +1,18 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  test "it does not include cancelled events in the landing page feed" do
+    cancelled = create :event, cancelled_at:Time.now
+    alive = create :event
+
+    get posts_path
+
+    assert_equal 200, response.status
+    json = JSON.parse response.body
+    assert_equal 1, json["posts"].length
+    assert_equal alive.post.id, json["posts"][0]["id"]
+  end
+
   test "it doesn't allow users who have not accepted the instructor terms to create an event" do
     user = create(:user, instructor_terms_accepted:false)
     post = build :post
@@ -84,13 +96,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'test@example.org', Post.last.event.email
   end
 
-  test "serves every post" do
+  test "serves every event and no posts" do
+    event = create :event
     post = create :post
 
     get posts_path
 
     json = JSON.parse(response.body)
-    assert_equal [post.id], json['posts'].map{|h|h["id"]}
+    assert_equal [event.post.id], json['posts'].map{|h|h["id"]}
     assert_equal 1, json["page"]
     assert_equal 1, json["total"]
   end

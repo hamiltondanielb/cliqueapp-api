@@ -23,6 +23,10 @@ class Post < ApplicationRecord
 
   validates_attachment_content_type :media, content_type: [/\Aimage\/.*\z/]
 
+  def self.with_active_event
+    joins(:event).where('events.cancelled_at':nil)
+  end
+
   def self.search *args
     public.joins(:event).where.not(events_posts: {post_id: nil})
       .post_search(*args)
