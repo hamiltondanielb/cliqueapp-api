@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   delete '/users', to: 'users#destroy'
-  
+
   devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", confirmations: "confirmations"}
 
   match '*path', via: :options, to: 'application#options'
@@ -43,4 +43,6 @@ Rails.application.routes.draw do
   get '/search/events', to: 'searches#event_search', as: 'event_search'
 
   resources :articles
+
+   get '/geo_ip_request/', to: "geo_ip_request#users_ip"
 end
