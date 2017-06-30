@@ -1,5 +1,7 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+Devise::Mailer.layout "mailer"
+
 Devise.setup do |config|
   raise "Please specify a DEVISE_JWT_SECRET_KEY in the environment" if ENV['DEVISE_JWT_SECRET_KEY'].blank?
   config.jwt do |jwt|
