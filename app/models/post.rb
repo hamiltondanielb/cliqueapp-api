@@ -43,8 +43,9 @@ class Post < ApplicationRecord
     locations = Location.near(location[0].address, 20)
     posts = []
     locations.each { |l|
-        Post.joins(:event).includes(:event).each { |p|
-          posts.push(p) if p.event.location.id == l.id
+        Post.joins(:event).includes(:event).each { |post|
+
+          posts.push(post) if post.event.location != nil && post.event.location.id == l.id
         }
     }
     return posts
