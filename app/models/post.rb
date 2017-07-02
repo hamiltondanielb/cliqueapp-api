@@ -39,7 +39,6 @@ class Post < ApplicationRecord
   end
 
   def self.with_event_near ip
-    p ip
     location = Geocoder.search(ip)
     locations = Location.near(location[0].address, 20)
     posts = []
