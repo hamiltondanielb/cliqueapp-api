@@ -38,6 +38,17 @@ class Post < ApplicationRecord
     Post.joins(:event).includes(:event).where('events.start_time >= ? and events.start_time <= ?', range_start, range_end)
   end
 
+  def self.with_event_near location
+    locations = Location.near(location, 20)
+    posts = []
+    locations.each { |l|
+        Post.joins(:event).includes(:event).each { |p|
+          posts.push(p) if p.event.location.id == l.id
+        }
+    }
+    return posts
+  end
+
   def self.public
     Post.joins(:user).where(users: {private: false})
   end

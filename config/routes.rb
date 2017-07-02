@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get '/events/days_with_events', to: 'events#days_with_events', as: 'days_with_events'
   get '/events/days_with_following_events', to: 'events#days_with_following_events', as: 'days_with_following_events'
   get '/events/days_with_event_registrations', to: 'event_registrations#days_with_event_registrations', as: 'days_with_event_registrations'
+  get '/events/local_events', to: 'events#local_events', as: 'local_events'
 
   get '/events/following', to: 'events#following_events', as: 'following_events'
 
@@ -43,6 +44,4 @@ Rails.application.routes.draw do
   get '/search/events', to: 'searches#event_search', as: 'event_search'
 
   resources :articles
-
-   get '/geo_ip_request/', to: "geo_ip_request#users_ip"
 end
