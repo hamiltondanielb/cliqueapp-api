@@ -86,4 +86,48 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 200, response.status
     assert response.body.include?(event.id.to_s)
   end
+
+  test "lists events by location" do
+    event = create :event
+
+    patch post_path(event.post), params: {post: {event: {
+      start_time: "2017-05-25T16:43:50.206Z",
+      end_time: "2017-05-25T17:53:50.206Z",
+      cards_accepted: true,
+      max_participants: 10,
+      email: 'test@example.org',
+      location: {
+        label: 'Studio',
+        address: '2355 W 29th Ave Northwest, Denver, CO',
+        lat: 39.758408,
+        lng: -105.015233
+      }
+    }}}, headers: authorization_header_for(event.post.user)
+
+    get local_events_path, headers: authorization_header_for(create(:user))
+
+    assert_equal 200, response.status
+    json = JSON.parse response.body
+    assert_equal 1, json["posts"].length
+    assert_equal "2355 W 29th Ave Northwest, Denver, CO", json["posts"][0]["event"]["location"]["address"]
+  end
+
+  test "lists events by location no event location" do
+    event = create :event
+
+    patch post_path(event.post), params: {post: {event: {
+      start_time: "2017-05-25T16:43:50.206Z",
+      end_time: "2017-05-25T17:53:50.206Z",
+      cards_accepted: true,
+      max_participants: 10,
+      email: 'test@example.org'
+    }}}, headers: authorization_header_for(event.post.user)
+
+    get local_events_path, headers: authorization_header_for(create(:user))
+
+    assert_equal 200, response.status
+    json = JSON.parse response.body
+    assert_equal 0, json["posts"].length
+  end
+
 end
