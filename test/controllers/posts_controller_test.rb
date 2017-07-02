@@ -55,8 +55,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 53, event.end_time.min
     assert_equal 'Studio', event.location.label
     assert_equal '1 Shibuya', event.location.address
-    assert_equal 33.1, event.location.lat
-    assert_equal 123.1, event.location.lng
     assert event.cards_accepted?
     assert_equal 10, event.max_participants
     assert_equal 'test@example.org', event.email
@@ -89,8 +87,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 17, Post.last.event.end_time.hour
     assert_equal 'Studio', Post.last.event.location.label
     assert_equal '1 Shibuya', Post.last.event.location.address
-    assert_equal 33.1, Post.last.event.location.lat
-    assert_equal 123.1, Post.last.event.location.lng
     assert Post.last.event.cards_accepted?
     assert_equal 10, Post.last.event.max_participants
     assert_equal 'test@example.org', Post.last.event.email

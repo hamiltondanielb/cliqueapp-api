@@ -44,6 +44,4 @@ Rails.application.routes.draw do
   get '/search/events', to: 'searches#event_search', as: 'event_search'
 
   resources :articles
-
-   get '/geo_ip_request/', to: "geo_ip_request#users_ip"
 end
