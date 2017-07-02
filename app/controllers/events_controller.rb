@@ -22,8 +22,8 @@ class EventsController < ApplicationController
 
   def local_events
     #return render(json: {errors: {global: 'Please specify a location'}}, status:400) if params[:location].blank?
-#request.location
-    posts = Post.with_event_near('Denver, Co, US')
+
+    posts = Post.with_event_near(request.location)
 
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
