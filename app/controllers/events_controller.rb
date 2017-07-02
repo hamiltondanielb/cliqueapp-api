@@ -20,10 +20,19 @@ class EventsController < ApplicationController
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
 
+  def remote_ip
+   if request.location.ip == '127.0.0.1'
+     # Hard coded remote address for local testing
+     '71.205.66.136'
+   else
+     request.location.ip
+   end
+ end
+
   def local_events
     #return render(json: {errors: {global: 'Please specify a location'}}, status:400) if params[:location].blank?
-
-    posts = Post.with_event_near(request.location)
+    #request.location
+    posts = Post.with_event_near(remote_ip())
 
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
