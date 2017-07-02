@@ -20,6 +20,13 @@ class EventsController < ApplicationController
     render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
   end
 
+  def local_events
+    #return render(json: {errors: {global: 'Please specify a location'}}, status:400) if params[:location].blank?
+    posts = Post.with_event_near(request.location)
+
+    render json: {posts:ActiveModelSerializers::SerializableResource.new(posts)}
+  end
+
   def following_events
     return render(json: {errors: {global: 'Please specify a date'}}, status:400) if params[:date].blank?
 

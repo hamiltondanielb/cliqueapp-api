@@ -20,10 +20,16 @@ ActiveRecord::Base.transaction do
     Post.create! user: User.all.sample, description: "test post #{n}", media_file_name: "test.png", media_file_size:0
   end
 
-  5.times do |n|
+  3.times do |n|
     start_time = [-3,-2,-1,0,1,2,3].sample.days.from_now
     end_time = start_time + 2.hours
-    Post.create! user: User.all.sample, description: "my event #{n}", media_file_name: "test.png", media_file_size: 0, event: Event.new(start_time:start_time, end_time:end_time, location: Location.new(label:'there'))
+    Post.create! user: User.all.sample, description: "my event #{n}", media_file_name: "test.png", media_file_size: 0, event: Event.new(start_time:start_time, end_time:end_time, location: Location.new(label: "Pretty Cool Place",address: "2355 W 29th Ave, Denver, CO 80211", lat: "39.758408", lng: "-105.015233"))
+  end
+
+  2.times do |n|
+    start_time = [-3,-2,-1,0,1,2,3].sample.days.from_now
+    end_time = start_time + 2.hours
+    Post.create! user: User.all.sample, description: "my event #{n}", media_file_name: "test.png", media_file_size: 0, event: Event.new(start_time:start_time, end_time:end_time, location: Location.new(label: "Great Place", address: "世田谷区 ２１ ２丁目", lat: "35.645124", lng: "139.617916"))
   end
 
 end

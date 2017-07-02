@@ -27,3 +27,5 @@
 /coverage
 /.ruby-version
 /test/reports
+
+.DS_Store
