@@ -27,7 +27,7 @@ class Event < ApplicationRecord
     where('start_time >= ?', range_start).where('start_time <= ?', range_end)
   end
 
-  def self.perform_payouts! currency:"JPY"
+  def self.perform_payouts! currency:"USD"
     errors = []
 
     events = to_be_paid_out
@@ -56,7 +56,7 @@ class Event < ApplicationRecord
       .where('start_time < ?', DAYS_BETWEEN_EVENT_AND_PAYOUT.days.ago)
   end
 
-  def pay_out! currency:"JPY"
+  def pay_out! currency:"USD"
     payout = PaymentProcessor.new.pay_out total_paid, post.user.stripe_account_id, transfer_group_id, currency:currency
     self.update! paid_out_at: Time.now, payout_id: payout.id, payout_sum: payout.amount, payout_currency: payout.currency
   end

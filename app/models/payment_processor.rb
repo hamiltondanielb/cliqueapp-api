@@ -14,7 +14,7 @@ class PaymentProcessor
     end
   end
 
-  def charge amount, customer_id, transfer_group_id, currency:"JPY"
+  def charge amount, customer_id, transfer_group_id, currency:"USD"
     begin
       return Stripe::Charge.create({
         :amount => amount,
@@ -28,7 +28,7 @@ class PaymentProcessor
     end
   end
 
-  def pay_out amount, account_id, transfer_group_id, currency:"JPY"
+  def pay_out amount, account_id, transfer_group_id, currency:"USD"
     begin
       return Stripe::Transfer.create({
         :amount => (amount*(1-APPLICATION_FEE/100)).to_i,
@@ -42,7 +42,7 @@ class PaymentProcessor
     end
   end
 
-  def refund charge_id, currency:"JPY"
+  def refund charge_id, currency:"USD"
     begin
       return Stripe::Refund.create(charge:charge_id)
     rescue Exception => e

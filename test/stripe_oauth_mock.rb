@@ -21,12 +21,12 @@ module StripeOAuthMock
 
       def token *args
         {
-          "access_token" => "sk_test_za9FT44qIMldK3TOUHCsGD7h",
+          "access_token" => "sk_test_9QVFr56LLXl0poJwZGwXgvJK",
           "livemode" => false,
           "refresh_token" => "rt_AlNhnKjtcG236t2UimQlzfzkk3nDnhbmIgBWTSAq5JI4laOj",
           "token_type" => "bearer",
-          "stripe_publishable_key" => "pk_test_XCS8jeRcJDqbsfs7XsUwb86I",
-          "stripe_user_id" => "acct_1APooBIZnFqNBeQe",
+          "stripe_publishable_key" => "pk_test_ac8Vb9tQdorDZOek1M1D7fFB",
+          "stripe_user_id" => "acct_1AbI8cDzLku0g3xM",
           "scope" => "read_write"
         }
       end
