@@ -42,7 +42,7 @@ class PaymentProcessor
     end
   end
 
-  def refund charge_id, currency:"JPY"
+  def refund charge_id, currency:"USD"
     begin
       return Stripe::Refund.create(charge:charge_id)
     rescue Exception => e
