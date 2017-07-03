@@ -1,4 +1,4 @@
-# Clique App Api
+# Clique App Api Doc
 ## Install
 
 - Install ruby
