@@ -1,21 +1,21 @@
 default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   adapter: <%= ENV["USE_PG"].present?? 'postgresql' : 'sqlite3' %>
-  username: <%= ENV["USE_PG"].present?? 'openlesson' : nil %>
-  password: <%= ENV["USE_PG"].present?? 'openlesson' : nil %>
+  username: <%= ENV["USE_PG"].present?? 'clique' : nil %>
+  password: <%= ENV["USE_PG"].present?? 'clique' : nil %>
   timeout: 5000
   host: localhost
 
 development:
   <<: *default
-  database: <%= ENV["USE_PG"].present?? 'openlesson' : 'db/development.sqlite3' %>
+  database: <%= ENV["USE_PG"].present?? 'clique' : 'db/development.sqlite3' %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: <%= ENV["USE_PG"].present?? 'openlessontest' : 'db/test.sqlite3' %>
+  database: <%= ENV["USE_PG"].present?? 'clique' : 'db/test.sqlite3' %>
 
 production:
   <<: *default

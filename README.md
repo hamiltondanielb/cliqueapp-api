@@ -1,4 +1,5 @@
-# Install
+# Clique App Api
+## Install
 
 - Install ruby
 - Install bundler: `gem install bundler`

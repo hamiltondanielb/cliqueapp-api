@@ -12,10 +12,10 @@ deployment:
           password $HEROKU_TOKEN
         EOF
       - chmod 600 ~/.netrc # Heroku cli complains about permissions without this
-      - heroku maintenance:on --app open-lesson-api-staging
-      - git push git@heroku.com:open-lesson-api-staging.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rails db:migrate --app open-lesson-api-staging
-      - heroku maintenance:off --app open-lesson-api-staging
+      - heroku maintenance:on --app clique-api
+      - git push git@heroku.com:clique-api.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rails db:migrate --app clique-api
+      - heroku maintenance:off --app clique-api
 
 general:
   artifacts:
